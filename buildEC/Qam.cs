@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace buildEC
 {
+    //Class to hold the properties that make a QAM
     class Qam
     {
         private string _type;
         private string _name;
         private string _port;
 
+        //Variable for the name through which the type of the QAM can be determined
         public string Name
         {
             get
@@ -23,7 +25,8 @@ namespace buildEC
             {
                 //Set device type based on the name
                 //All NSGs start with LINNSG or ADTNSG
-                if (value.ToLower().StartsWith("linnsg") || value.ToLower().StartsWith("adtnsg"))
+                //Just realized York NSG breaks the mold because it was the first...
+                if (value.ToLower().StartsWith("linnsg") || value.ToLower().StartsWith("adtnsg") || value.ToLower() == "yk-nsg40g-01")
                 {
                     this._type = "NSG";
                 }
@@ -36,10 +39,12 @@ namespace buildEC
             }
         }
 
+        //Method to determine the port value which is different for an NSG vs GQAM
         public string Port
         {
             get
             {
+                //Return the port in format that can be used to select the value from the EC drop-down
                 Match match = Regex.Match(this._port, @"\d+");
                 return $"RF Out {match.Groups[1]} Carrier {match.Groups[2]}";
             }
@@ -81,8 +86,8 @@ namespace buildEC
                             carrier = Convert.ToInt32(value) % 4;
                     }
                 }
-
-                this._port = $@"{Convert.ToInt32(rfOut)}\{Convert.ToInt32(carrier)}";
+                //Set the port value to a generic "RF Out/Carrier" Value
+                this._port = $@"{Convert.ToInt32(rfOut)}/{Convert.ToInt32(carrier)}";
             }
         }
     }

@@ -50,7 +50,25 @@ namespace buildEC
             MessageBox.Show(test.Ip);
             */
 
+            //Assign all column values to pull cell values
+            sourceNameCol = SrcNmCol.Text.ToString();
+            sourceIdCol = SrcIdCol.Text.ToString();
+            sourceIpCol = SrcIpCol.Text.ToString();
+            mcastIpCol = MulticastIpCol.Text.ToString();
+            udpPortCol = UdpCol.Text.ToString();
+            mpegCol = ProgNumCol.Text.ToString();
+            bandwidthCol = BwCol.Text.ToString();
+            deviceNameCol = DeviceCol.Text.ToString();
+            portCol = PortCol.Text.ToString();
+
             Build.openExcelFile(textBox1.Text.ToString());
+
+            int blankLines = 0;
+
+            while(blankLines < 5)
+            {
+
+            }
         }
     }
 

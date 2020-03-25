@@ -20,6 +20,7 @@ namespace buildEC
             }
             set
             {
+                //Set the IP address if the value is valid
                 if (isValid(value))
                 {
                     this._ip = value;
