@@ -28,6 +28,10 @@ namespace buildEC
             }  
         }
 
+        public ipAddress()
+        {
+            this._ip = null;
+        }
         public ipAddress(string v)
         {
             if (isValid(v))

@@ -46,7 +46,10 @@ namespace buildEC
             {
                 //Return the port in format that can be used to select the value from the EC drop-down
                 Match match = Regex.Match(this._port, @"\d+");
-                return $"RF Out {match.Groups[1]} Carrier {match.Groups[2]}";
+                string rfOut = match.Value.ToString();
+                match = match.NextMatch();
+                string carrier = match.Value.ToString();
+                return $"RF Out {rfOut} Carrier {carrier}";
             }
             set
             {
@@ -88,6 +91,38 @@ namespace buildEC
                 }
                 //Set the port value to a generic "RF Out/Carrier" Value
                 this._port = $@"{Convert.ToInt32(rfOut)}/{Convert.ToInt32(carrier)}";
+            }
+        }
+
+        public int getPortNumber()
+        {
+            //Seperate port fields into two values to return to origial port number
+            Match match = Regex.Match(this._port, @"\d+");
+            string rfOut = match.Value.ToString();
+            match = match.NextMatch();
+            string carrier = match.Value.ToString();
+
+            if (this._type == "NSG")
+            {
+                if (Convert.ToInt32(rfOut) == 1)
+                {
+                    return Convert.ToInt32(carrier);
+                }
+                else
+                {
+                    return ((Convert.ToInt32(rfOut) - 1) * 36) + Convert.ToInt32(carrier);
+                }
+            }
+            else
+            {
+                if (Convert.ToInt32(rfOut) == 1)
+                {
+                    return Convert.ToInt32(carrier);
+                }
+                else
+                {
+                    return ((Convert.ToInt32(rfOut) - 1) * 4) + Convert.ToInt32(carrier);
+                }
             }
         }
     }

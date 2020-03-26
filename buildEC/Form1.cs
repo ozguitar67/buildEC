@@ -46,10 +46,13 @@ namespace buildEC
         private void button1_Click(object sender, EventArgs e)
         {
             /*
-            ipAddress test = new ipAddress(textBox1.Text.ToString());
+            //ipAddress test = new ipAddress(textBox1.Text.ToString());
+            ipAddress test = new ipAddress();
+            test.Ip = textBox1.Text.ToString();
             MessageBox.Show(test.Ip);
             */
 
+            
             //Assign all column values to pull cell values
             sourceNameCol = SrcNmCol.Text.ToString();
             sourceIdCol = SrcIdCol.Text.ToString();
@@ -61,13 +64,38 @@ namespace buildEC
             deviceNameCol = DeviceCol.Text.ToString();
             portCol = PortCol.Text.ToString();
 
-            Build.openExcelFile(textBox1.Text.ToString());
-
-            int blankLines = 0;
-
-            while(blankLines < 5)
+            try
             {
+                Build.openExcelFile(textBox1.Text.ToString());
 
+                int blankLines = 0;
+                int excelRow = 1;
+
+                while (blankLines < 5)
+                {
+                    Build.pubSvc = Build.getService(excelRow++);
+                    if (!Build.pubSvc.isValidService)
+                    {
+                        blankLines++;
+                        continue;
+                    }
+                    MessageBox.Show($"{Build.pubSvc.SourceName} {Build.pubSvc.SourceId} {Convert.ToString(Build.pubSvc.SourceIp.Ip)} {Convert.ToString(Build.pubSvc.MulticastIp.Ip)} {Build.pubSvc.UdpPort} {Build.pubSvc.ProgramNumber} {Build.pubSvc.Bandwidth} {Build.pubSvc.Qam.Name} {Build.pubSvc.Qam.Port}");
+                }
+            }
+            finally
+            {
+                Build.closeExcelFile();
+
+                if (System.Windows.Forms.Application.MessageLoop)
+                {
+                    // WinForms app
+                    System.Windows.Forms.Application.Exit();
+                }
+                else
+                {
+                    // Console app
+                    System.Environment.Exit(1);
+                }
             }
         }
     }
