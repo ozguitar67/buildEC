@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -63,6 +64,8 @@ namespace buildEC
             bandwidthCol = BwCol.Text.ToString();
             deviceNameCol = DeviceCol.Text.ToString();
             portCol = PortCol.Text.ToString();
+            ecUserName = EcUserName.Text.ToString();
+            ecPassword = EcPassword.Text.ToString();
 
             try
             {
@@ -81,10 +84,15 @@ namespace buildEC
                     }
                     MessageBox.Show($"{Build.pubSvc.SourceName} {Build.pubSvc.SourceId} {Convert.ToString(Build.pubSvc.SourceIp.Ip)} {Convert.ToString(Build.pubSvc.MulticastIp.Ip)} {Build.pubSvc.UdpPort} {Build.pubSvc.ProgramNumber} {Build.pubSvc.Bandwidth} {Build.pubSvc.Qam.Name} {Build.pubSvc.Qam.Port}");
                 }
+
+                Build.initBrowser();
+                Build.gotoEC(@"http://10.34.107.194/dncs/console/home.do", ecUserName, ecPassword);
+                Thread.Sleep(2500);
             }
             finally
             {
                 Build.closeExcelFile();
+                Build.driver.Quit();
 
                 if (System.Windows.Forms.Application.MessageLoop)
                 {

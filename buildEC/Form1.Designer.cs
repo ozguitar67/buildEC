@@ -15,6 +15,8 @@
         static public string deviceNameCol;
         static public string portCol;
         static public string mpegCol;
+        static public string ecUserName;
+        static public string ecPassword;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -61,6 +63,10 @@
             this.ProgNumLbl = new System.Windows.Forms.Label();
             this.ProgNumCol = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.ecUserNameLbl = new System.Windows.Forms.Label();
+            this.ecPasswordLbl = new System.Windows.Forms.Label();
+            this.EcUserName = new System.Windows.Forms.TextBox();
+            this.EcPassword = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -281,11 +287,52 @@
             this.label1.TabIndex = 21;
             this.label1.Text = "Enter the column letters from the spreadsheet for each piece of information";
             // 
+            // ecUserNameLbl
+            // 
+            this.ecUserNameLbl.AutoSize = true;
+            this.ecUserNameLbl.Location = new System.Drawing.Point(393, 145);
+            this.ecUserNameLbl.Name = "ecUserNameLbl";
+            this.ecUserNameLbl.Size = new System.Drawing.Size(60, 13);
+            this.ecUserNameLbl.TabIndex = 22;
+            this.ecUserNameLbl.Text = "User Name";
+            // 
+            // ecPasswordLbl
+            // 
+            this.ecPasswordLbl.AutoSize = true;
+            this.ecPasswordLbl.Location = new System.Drawing.Point(393, 170);
+            this.ecPasswordLbl.Name = "ecPasswordLbl";
+            this.ecPasswordLbl.Size = new System.Drawing.Size(53, 13);
+            this.ecPasswordLbl.TabIndex = 23;
+            this.ecPasswordLbl.Text = "Password";
+            // 
+            // EcUserName
+            // 
+            this.EcUserName.Location = new System.Drawing.Point(459, 138);
+            this.EcUserName.MaxLength = 30;
+            this.EcUserName.Name = "EcUserName";
+            this.EcUserName.Size = new System.Drawing.Size(117, 20);
+            this.EcUserName.TabIndex = 24;
+            this.EcUserName.WordWrap = false;
+            // 
+            // EcPassword
+            // 
+            this.EcPassword.Location = new System.Drawing.Point(459, 167);
+            this.EcPassword.MaxLength = 64;
+            this.EcPassword.Name = "EcPassword";
+            this.EcPassword.Size = new System.Drawing.Size(117, 20);
+            this.EcPassword.TabIndex = 25;
+            this.EcPassword.UseSystemPasswordChar = true;
+            this.EcPassword.WordWrap = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 208);
+            this.Controls.Add(this.EcPassword);
+            this.Controls.Add(this.EcUserName);
+            this.Controls.Add(this.ecPasswordLbl);
+            this.Controls.Add(this.ecUserNameLbl);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ProgNumCol);
             this.Controls.Add(this.ProgNumLbl);
@@ -341,6 +388,10 @@
         private System.Windows.Forms.Label ProgNumLbl;
         private System.Windows.Forms.TextBox ProgNumCol;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label ecUserNameLbl;
+        private System.Windows.Forms.Label ecPasswordLbl;
+        private System.Windows.Forms.TextBox EcUserName;
+        private System.Windows.Forms.TextBox EcPassword;
     }
 }
 
