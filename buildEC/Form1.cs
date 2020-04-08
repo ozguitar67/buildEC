@@ -66,6 +66,8 @@ namespace buildEC
             portCol = PortCol.Text.ToString();
             ecUserName = EcUserName.Text.ToString();
             ecPassword = EcPassword.Text.ToString();
+            //Hide form after button is clicked to remove from view
+            this.Hide();
 
             try
             {

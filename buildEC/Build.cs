@@ -17,10 +17,11 @@ namespace buildEC
         public static Worksheet excelWkSht = new Microsoft.Office.Interop.Excel.Worksheet();
         public static Service pubSvc = new Service();
         public static OpenQA.Selenium.IWebDriver driver;
-        //public static OpenQA.Selenium.IWebDriver driver = new FirefoxDriver();
-
+        
+        //Method to instantiate a browser with the correct options set to access the ECs
         static public void initBrowser()
         {
+            //Set encoding to avoid "encoding 437" error
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             FirefoxOptions options = new FirefoxOptions();
             FirefoxProfile profile = new FirefoxProfile();
@@ -31,6 +32,7 @@ namespace buildEC
             driver = new FirefoxDriver(options);
         }
 
+        //Method to open the chosen excel file in a hidden application
         static public void openExcelFile(string fileName)
         {
             //excelApp.Visible = false;
@@ -38,11 +40,14 @@ namespace buildEC
             excelWkSht = excelApp.ActiveSheet;
         }
 
+        //Method to close the excel application
         static public void closeExcelFile()
         {
             excelApp.Quit();
         }
 
+        //Method to get the service information from the excel file 
+        //and assign the values to the correct variables
         static public Service getService(int row)
         {
             Service svc = new Service();
@@ -68,21 +73,23 @@ namespace buildEC
                 cellName = getCell(Form1.portCol, row);
                 svc.Qam.Port = Convert.ToString(excelWkSht.Range[cellName].Value);
             }
+            //if we encounter an error, return the partial information to be skipped in the main program
             catch(Exception e)
             {
-
                 return svc;
             }
 
             return svc;
         }
 
+        //Method to convert the row count and column letter into an Excel cell value
         private static string getCell(string column, int row)
         {
             string cellName = column + Convert.ToString(row);
             return cellName;
         }
 
+        //Method to use credentials provided to log into an EC
         public static void gotoEC(string url, string uName, string pw)
         {
             
@@ -90,6 +97,7 @@ namespace buildEC
             {
                 driver.Navigate().GoToUrl($@"{url}");
             }
+            //Bypass the security warning
             catch (InvalidOperationException)
             {
                 driver.FindElement(By.Id("advancedButton")).Click();
@@ -99,7 +107,7 @@ namespace buildEC
             {
                 MessageBox.Show($"Failed because {e}");
             }
-
+            //Enter the username and password
             driver.FindElement(By.Id("label_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
             try
             {

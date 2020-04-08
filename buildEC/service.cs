@@ -10,6 +10,7 @@ namespace buildEC
     class Service
     {
         //Keep a count of how many services that were created
+        //Start at -1 because we create a public service in the Build class
         static private int count = -1;
         //Is this a valid service from the input given...?
         public bool isValidService
