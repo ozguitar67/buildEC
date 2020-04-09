@@ -15,6 +15,7 @@
         static public string deviceNameCol;
         static public string portCol;
         static public string mpegCol;
+        static public string controllerCol;
         static public string ecUserName;
         static public string ecPassword;
 
@@ -67,6 +68,8 @@
             this.ecPasswordLbl = new System.Windows.Forms.Label();
             this.EcUserName = new System.Windows.Forms.TextBox();
             this.EcPassword = new System.Windows.Forms.TextBox();
+            this.ControllerLbl = new System.Windows.Forms.Label();
+            this.ControllerCol = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -324,11 +327,32 @@
             this.EcPassword.UseSystemPasswordChar = true;
             this.EcPassword.WordWrap = false;
             // 
+            // ControllerLbl
+            // 
+            this.ControllerLbl.AutoSize = true;
+            this.ControllerLbl.Location = new System.Drawing.Point(383, 112);
+            this.ControllerLbl.Name = "ControllerLbl";
+            this.ControllerLbl.Size = new System.Drawing.Size(51, 13);
+            this.ControllerLbl.TabIndex = 26;
+            this.ControllerLbl.Text = "Controller";
+            // 
+            // ControllerCol
+            // 
+            this.ControllerCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.ControllerCol.Location = new System.Drawing.Point(440, 109);
+            this.ControllerCol.MaxLength = 2;
+            this.ControllerCol.Name = "ControllerCol";
+            this.ControllerCol.Size = new System.Drawing.Size(24, 20);
+            this.ControllerCol.TabIndex = 27;
+            this.ControllerCol.WordWrap = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 208);
+            this.Controls.Add(this.ControllerCol);
+            this.Controls.Add(this.ControllerLbl);
             this.Controls.Add(this.EcPassword);
             this.Controls.Add(this.EcUserName);
             this.Controls.Add(this.ecPasswordLbl);
@@ -392,6 +416,8 @@
         private System.Windows.Forms.Label ecPasswordLbl;
         private System.Windows.Forms.TextBox EcUserName;
         private System.Windows.Forms.TextBox EcPassword;
+        private System.Windows.Forms.Label ControllerLbl;
+        private System.Windows.Forms.TextBox ControllerCol;
     }
 }
 

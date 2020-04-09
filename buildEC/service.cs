@@ -33,6 +33,7 @@ namespace buildEC
         public int ProgramNumber { get; set; }
         public string SourceName { get; set; }
         public int SourceId { get; set; }
+        public string ControllerName { get; set; }
         
         public Qam Qam = new Qam();
 
@@ -41,7 +42,7 @@ namespace buildEC
         {
             bool isValid = true;
 
-            if (String.IsNullOrEmpty(this.SourceName) || !(this.SourceId > 0) || String.IsNullOrEmpty(Convert.ToString(this.SourceIp.Ip)) || String.IsNullOrEmpty(Convert.ToString(this.MulticastIp.Ip)) || !(this.UdpPort > 0) || !(this.ProgramNumber > 0) || !(this.Bandwidth > 0) || String.IsNullOrEmpty(this.Qam.Name) || !(this.Qam.getPortNumber() > 0))
+            if (String.IsNullOrEmpty(this.SourceName) || !(this.SourceId > 0) || String.IsNullOrEmpty(Convert.ToString(this.SourceIp.Ip)) || String.IsNullOrEmpty(Convert.ToString(this.MulticastIp.Ip)) || !(this.UdpPort > 0) || !(this.ProgramNumber > 0) || !(this.Bandwidth > 0) || String.IsNullOrEmpty(this.Qam.Name) || !(this.Qam.getPortNumber() > 0) || String.IsNullOrEmpty(this.ControllerName))
             {
                 isValid = false;
                 count--;

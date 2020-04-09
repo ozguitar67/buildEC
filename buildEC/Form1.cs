@@ -64,6 +64,7 @@ namespace buildEC
             bandwidthCol = BwCol.Text.ToString();
             deviceNameCol = DeviceCol.Text.ToString();
             portCol = PortCol.Text.ToString();
+            controllerCol = ControllerCol.Text.ToString();
             ecUserName = EcUserName.Text.ToString();
             ecPassword = EcPassword.Text.ToString();
             //Hide form after button is clicked to remove from view
@@ -88,7 +89,7 @@ namespace buildEC
                 }
 
                 Build.initBrowser();
-                Build.gotoEC(@"http://10.34.107.194/dncs/console/home.do", ecUserName, ecPassword);
+                Build.gotoEC(Build.pubSvc.ControllerName, ecUserName, ecPassword);
                 Thread.Sleep(2500);
             }
             finally

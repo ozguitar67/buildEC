@@ -17,7 +17,10 @@ namespace buildEC
         public static Worksheet excelWkSht = new Microsoft.Office.Interop.Excel.Worksheet();
         public static Service pubSvc = new Service();
         public static OpenQA.Selenium.IWebDriver driver;
-        
+        //Lists to hold the controllers and their IPs
+        //Second list contains EC8s that need https for the URL
+        public static readonly SortedList<string, string> ECLIST = new SortedList<string,string>() { { "CPA1", "10.34.107.194" }, { "CPA2", "10.34.107.202" }, { "Pitt", "10.34.95.210" }, { "Cherry Hill", "10.35.92.58" }, { "Monmouth", "10.35.89.66" }, { "Alexandria", "10.32.230.82" }, { "Carroll", "10.32.230.42" }, { "Chesterfield", "10.33.203.50" }, { "Dale City", "10.32.230.90" }, { "Dover", "10.32.230.50" }, { "Howard", "10.32.230.66" }, { "Staunton", "10.33.203.58" }, { "Hamden", "172.21.161.130" }, { "Londonderry", "172.21.77.66" }, { "Plymouth", "172.21.77.74" } };
+        public static readonly List<string> EC8 = new List<string>() { "Cherry Hill", "Chesterfield", "Hamden", "Londonderry", "Plymouth" };
         //Method to instantiate a browser with the correct options set to access the ECs
         static public void initBrowser()
         {
@@ -72,6 +75,8 @@ namespace buildEC
                 svc.Qam.Name = excelWkSht.Range[cellName].Value;
                 cellName = getCell(Form1.portCol, row);
                 svc.Qam.Port = Convert.ToString(excelWkSht.Range[cellName].Value);
+                cellName = getCell(Form1.controllerCol, row);
+                svc.ControllerName = Convert.ToString(excelWkSht.Range[cellName].Value);
             }
             //if we encounter an error, return the partial information to be skipped in the main program
             catch(Exception e)
@@ -90,12 +95,27 @@ namespace buildEC
         }
 
         //Method to use credentials provided to log into an EC
-        public static void gotoEC(string url, string uName, string pw)
+        public static void gotoEC(string cName, string uName, string pw)
         {
-            
+            string url;
+
+            if (!ECLIST.ContainsKey(cName))
+            {
+                //insert code here to create a message box of ECLIST keys to select controller from for given controller name
+            }
+
+            if (EC8.Contains(cName))
+            {
+                url = @"https://" + ECLIST[cName] + @"/dncs/src/sourceTable.do";
+            }
+            else
+            {
+                url = @"http://" + ECLIST[cName] + @"/dncs/src/sourceTable.do";
+            }
+
             try
             {
-                driver.Navigate().GoToUrl($@"{url}");
+                driver.Navigate().GoToUrl($"{url}");
             }
             //Bypass the security warning
             catch (InvalidOperationException)
