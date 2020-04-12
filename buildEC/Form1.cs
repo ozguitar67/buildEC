@@ -72,11 +72,13 @@ namespace buildEC
 
             try
             {
+                //C:\OneDrive - Comcast\SMOPs\2020\03-26_ATT Sports Overflow Launch_NEDCA-16807\ATTPIT Test2.xlsx
                 Build.openExcelFile(textBox1.Text.ToString());
 
+                List<string> workList = new List<string>();
                 int blankLines = 0;
                 int excelRow = 1;
-
+                Build.initBrowser();
                 while (blankLines < 5)
                 {
                     Build.pubSvc = Build.getService(excelRow++);
@@ -85,11 +87,17 @@ namespace buildEC
                         blankLines++;
                         continue;
                     }
-                    MessageBox.Show($"{Build.pubSvc.SourceName} {Build.pubSvc.SourceId} {Convert.ToString(Build.pubSvc.SourceIp.Ip)} {Convert.ToString(Build.pubSvc.MulticastIp.Ip)} {Build.pubSvc.UdpPort} {Build.pubSvc.ProgramNumber} {Build.pubSvc.Bandwidth} {Build.pubSvc.Qam.Name} {Build.pubSvc.Qam.Port}");
+                    //MessageBox.Show($"{Build.pubSvc.SourceName} {Build.pubSvc.SourceId} {Convert.ToString(Build.pubSvc.SourceIp.Ip)} {Convert.ToString(Build.pubSvc.MulticastIp.Ip)} {Build.pubSvc.UdpPort} {Build.pubSvc.ProgramNumber} {Build.pubSvc.Bandwidth} {Build.pubSvc.Qam.Name} {Build.pubSvc.Qam.Port}");
+                    //Find if the controller for this service is already open
+                    if (!workList.Contains(Build.pubSvc.ControllerName))
+                    {
+                        workList.Add(Build.pubSvc.ControllerName);
+                        Build.gotoEC(ecUserName, ecPassword);
+                    }                    
                 }
 
-                Build.initBrowser();
-                Build.gotoEC(Build.pubSvc.ControllerName, ecUserName, ecPassword);
+                
+                //Build.gotoEC(Build.pubSvc.ControllerName, ecUserName, ecPassword);
                 Thread.Sleep(2500);
             }
             finally

@@ -95,24 +95,26 @@ namespace buildEC
         }
 
         //Method to use credentials provided to log into an EC
-        public static void gotoEC(string cName, string uName, string pw)
+        public static void gotoEC(string uName, string pw)
         {
             string url;
+            bool ec8 = false;
 
-            if (!ECLIST.ContainsKey(cName))
+            if (!ECLIST.ContainsKey(pubSvc.ControllerName))
             {
-                //insert code here to create a message box of ECLIST keys to select controller from for given controller name
+                Form2 window = new Form2();
+                window.ShowDialog();
             }
 
-            if (EC8.Contains(cName))
+            if (EC8.Contains(pubSvc.ControllerName))
             {
-                url = @"https://" + ECLIST[cName] + @"/dncs/src/sourceTable.do";
+                url = @"https://" + ECLIST[pubSvc.ControllerName] + @"/dncs/src/sourceTable.do";
+                ec8 = true;
             }
             else
             {
-                url = @"http://" + ECLIST[cName] + @"/dncs/src/sourceTable.do";
-            }
-
+                url = @"http://" + ECLIST[pubSvc.ControllerName] + @"/dncs/src/sourceTable.do";
+            
             try
             {
                 driver.Navigate().GoToUrl($"{url}");
@@ -127,12 +129,30 @@ namespace buildEC
             {
                 MessageBox.Show($"Failed because {e}");
             }
-            //Enter the username and password
-            driver.FindElement(By.Id("label_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+            if (driver.Title.Contains("Control Suite"))
+            {
+                //Enter the username and password
+                if (!ec8)
+                {
+                    driver.FindElement(By.Id("label_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+                }
+                else
+                {
+                    driver.FindElement(By.Id("loginPage_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+                }
+                
+            }
+            
             try
             {
-                //driver.FindElement(By.XPath("//*[@id='loginForm']//input[@value='Login']")).Click();
-                driver.FindElement(By.Id("loginPage_loginSubmit")).Click();
+                if (!ec8)
+                {
+                    driver.FindElement(By.Id("loginPage_loginSubmit")).Click();
+                }
+                else
+                {
+                    driver.FindElement(By.XPath("//*[@widgetid='loginPage_LoginButton']")).Click();
+                }
             }
             catch (NoSuchElementException)
             {
