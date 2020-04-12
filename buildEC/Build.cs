@@ -114,7 +114,8 @@ namespace buildEC
             else
             {
                 url = @"http://" + ECLIST[pubSvc.ControllerName] + @"/dncs/src/sourceTable.do";
-            
+            }
+
             try
             {
                 driver.Navigate().GoToUrl($"{url}");
