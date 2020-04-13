@@ -18,6 +18,7 @@
         static public string controllerCol;
         static public string ecUserName;
         static public string ecPassword;
+        static public string sessionMacCol;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -63,13 +64,15 @@
             this.PortCol = new System.Windows.Forms.TextBox();
             this.ProgNumLbl = new System.Windows.Forms.Label();
             this.ProgNumCol = new System.Windows.Forms.TextBox();
+            this.ControllerLbl = new System.Windows.Forms.Label();
+            this.ControllerCol = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ecUserNameLbl = new System.Windows.Forms.Label();
             this.ecPasswordLbl = new System.Windows.Forms.Label();
             this.EcUserName = new System.Windows.Forms.TextBox();
             this.EcPassword = new System.Windows.Forms.TextBox();
-            this.ControllerLbl = new System.Windows.Forms.Label();
-            this.ControllerCol = new System.Windows.Forms.TextBox();
+            this.SessionMacLbl = new System.Windows.Forms.Label();
+            this.SessionMacCol = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -281,6 +284,25 @@
             this.ProgNumCol.TabIndex = 20;
             this.ProgNumCol.WordWrap = false;
             // 
+            // ControllerLbl
+            // 
+            this.ControllerLbl.AutoSize = true;
+            this.ControllerLbl.Location = new System.Drawing.Point(383, 112);
+            this.ControllerLbl.Name = "ControllerLbl";
+            this.ControllerLbl.Size = new System.Drawing.Size(51, 13);
+            this.ControllerLbl.TabIndex = 26;
+            this.ControllerLbl.Text = "Controller";
+            // 
+            // ControllerCol
+            // 
+            this.ControllerCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.ControllerCol.Location = new System.Drawing.Point(440, 109);
+            this.ControllerCol.MaxLength = 2;
+            this.ControllerCol.Name = "ControllerCol";
+            this.ControllerCol.Size = new System.Drawing.Size(24, 20);
+            this.ControllerCol.TabIndex = 27;
+            this.ControllerCol.WordWrap = false;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -327,37 +349,39 @@
             this.EcPassword.UseSystemPasswordChar = true;
             this.EcPassword.WordWrap = false;
             // 
-            // ControllerLbl
+            // SessionMacLbl
             // 
-            this.ControllerLbl.AutoSize = true;
-            this.ControllerLbl.Location = new System.Drawing.Point(383, 112);
-            this.ControllerLbl.Name = "ControllerLbl";
-            this.ControllerLbl.Size = new System.Drawing.Size(51, 13);
-            this.ControllerLbl.TabIndex = 26;
-            this.ControllerLbl.Text = "Controller";
+            this.SessionMacLbl.AutoSize = true;
+            this.SessionMacLbl.Location = new System.Drawing.Point(470, 112);
+            this.SessionMacLbl.Name = "SessionMacLbl";
+            this.SessionMacLbl.Size = new System.Drawing.Size(70, 13);
+            this.SessionMacLbl.TabIndex = 28;
+            this.SessionMacLbl.Text = "Session MAC";
             // 
-            // ControllerCol
+            // SessionMacCol
             // 
-            this.ControllerCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.ControllerCol.Location = new System.Drawing.Point(440, 109);
-            this.ControllerCol.MaxLength = 2;
-            this.ControllerCol.Name = "ControllerCol";
-            this.ControllerCol.Size = new System.Drawing.Size(24, 20);
-            this.ControllerCol.TabIndex = 27;
-            this.ControllerCol.WordWrap = false;
+            this.SessionMacCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.SessionMacCol.Location = new System.Drawing.Point(546, 109);
+            this.SessionMacCol.MaxLength = 2;
+            this.SessionMacCol.Name = "SessionMacCol";
+            this.SessionMacCol.Size = new System.Drawing.Size(24, 20);
+            this.SessionMacCol.TabIndex = 29;
+            this.SessionMacCol.WordWrap = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 208);
-            this.Controls.Add(this.ControllerCol);
-            this.Controls.Add(this.ControllerLbl);
+            this.Controls.Add(this.SessionMacCol);
+            this.Controls.Add(this.SessionMacLbl);
             this.Controls.Add(this.EcPassword);
             this.Controls.Add(this.EcUserName);
             this.Controls.Add(this.ecPasswordLbl);
             this.Controls.Add(this.ecUserNameLbl);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.ControllerCol);
+            this.Controls.Add(this.ControllerLbl);
             this.Controls.Add(this.ProgNumCol);
             this.Controls.Add(this.ProgNumLbl);
             this.Controls.Add(this.PortCol);
@@ -411,13 +435,15 @@
         private System.Windows.Forms.TextBox PortCol;
         private System.Windows.Forms.Label ProgNumLbl;
         private System.Windows.Forms.TextBox ProgNumCol;
+        private System.Windows.Forms.Label ControllerLbl;
+        private System.Windows.Forms.TextBox ControllerCol;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label ecUserNameLbl;
         private System.Windows.Forms.Label ecPasswordLbl;
         private System.Windows.Forms.TextBox EcUserName;
         private System.Windows.Forms.TextBox EcPassword;
-        private System.Windows.Forms.Label ControllerLbl;
-        private System.Windows.Forms.TextBox ControllerCol;
+        private System.Windows.Forms.Label SessionMacLbl;
+        private System.Windows.Forms.TextBox SessionMacCol;
     }
 }
 

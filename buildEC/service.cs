@@ -34,7 +34,7 @@ namespace buildEC
         public string SourceName { get; set; }
         public int SourceId { get; set; }
         public string ControllerName { get; set; }
-        public string SessionID { get; set; }
+        public string SessionMAC { get; set; }
         
         public Qam Qam = new Qam();
 

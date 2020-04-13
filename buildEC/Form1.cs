@@ -65,6 +65,7 @@ namespace buildEC
             deviceNameCol = DeviceCol.Text.ToString();
             portCol = PortCol.Text.ToString();
             controllerCol = ControllerCol.Text.ToString();
+            sessionMacCol = SessionMacCol.Text.ToString();
             ecUserName = EcUserName.Text.ToString();
             ecPassword = EcPassword.Text.ToString();
             //Hide form after button is clicked to remove from view

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 using System.Windows.Forms;
@@ -21,6 +21,8 @@ namespace buildEC
         //Second list contains EC8s that need https for the URL
         public static readonly SortedList<string, string> ECLIST = new SortedList<string,string>() { { "CPA1", "10.34.107.194" }, { "CPA2", "10.34.107.202" }, { "Pitt", "10.34.95.210" }, { "Cherry Hill", "10.35.92.58" }, { "Monmouth", "10.35.89.66" }, { "Alexandria", "10.32.230.82" }, { "Carroll", "10.32.230.42" }, { "Chesterfield", "10.33.203.50" }, { "Dale City", "10.32.230.90" }, { "Dover", "10.32.230.50" }, { "Howard", "10.32.230.66" }, { "Staunton", "10.33.203.58" }, { "Hamden", "172.21.161.130" }, { "Londonderry", "172.21.77.66" }, { "Plymouth", "172.21.77.74" } };
         public static readonly List<string> EC8 = new List<string>() { "Cherry Hill", "Chesterfield", "Hamden", "Londonderry", "Plymouth" };
+        //List to keep track of windows opened and which controller they are for to switch back if needed
+        public static SortedList<string, string> WindowHandles = new SortedList<string, string>();
         //Method to instantiate a browser with the correct options set to access the ECs
         static public void initBrowser()
         {
@@ -31,6 +33,14 @@ namespace buildEC
             profile.DeleteAfterUse = true;
             profile.SetPreference("security.ssl3.dhe_rsa_aes_128_sha", false);
             profile.SetPreference("security.ssl3.dhe_rsa_aes_256_sha", false);
+            /*  Attempt to change settings to open new windows in tabs
+             *  It did not work...
+            //Change setting so that new windows open in a new tab...?
+            profile.SetPreference("browser.link.open_newwindow", 3);
+            profile.SetPreference("browser.link.open_newwindow.restriction", 0);
+            profile.SetPreference("browser.link.open_newwindow.override.external", 3);
+            profile.SetPreference("browser.urlbar.openintab", true); 
+            */
             options.Profile = profile;
             driver = new FirefoxDriver(options);
         }
@@ -77,6 +87,8 @@ namespace buildEC
                 svc.Qam.Port = Convert.ToString(excelWkSht.Range[cellName].Value);
                 cellName = getCell(Form1.controllerCol, row);
                 svc.ControllerName = Convert.ToString(excelWkSht.Range[cellName].Value);
+                cellName = getCell(Form1.sessionMacCol, row);
+                svc.SessionMAC = Convert.ToString(excelWkSht.Range[cellName].Value);
             }
             //if we encounter an error, return the partial information to be skipped in the main program
             catch(Exception e)
@@ -116,48 +128,63 @@ namespace buildEC
                 url = @"http://" + ECLIST[pubSvc.ControllerName] + @"/dncs/src/sourceTable.do";
             }
 
-            try
+            if(WindowHandles.ContainsKey(pubSvc.ControllerName))
             {
-                driver.Navigate().GoToUrl($"{url}");
+                driver.SwitchTo().Window(WindowHandles[pubSvc.ControllerName]);
             }
-            //Bypass the security warning
-            catch (InvalidOperationException)
+            else
             {
-                driver.FindElement(By.Id("advancedButton")).Click();
-                driver.FindElement(By.Id("exceptionDialogButton")).Click();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Failed because {e}");
-            }
-            if (driver.Title.Contains("Control Suite"))
-            {
-                //Enter the username and password
-                if (!ec8)
+                if(WindowHandles.Count != 0)
                 {
-                    driver.FindElement(By.Id("label_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+                    ((IJavaScriptExecutor)driver).ExecuteScript($"window.open('#','_blank')");
+                    driver.SwitchTo().Window(driver.WindowHandles.Last());
                 }
-                else
+                try
                 {
-                    driver.FindElement(By.Id("loginPage_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+                    driver.Navigate().GoToUrl($"{url}");
                 }
-                
-            }
-            
-            try
-            {
-                if (!ec8)
+                //Bypass the security warning
+                catch (InvalidOperationException)
                 {
-                    driver.FindElement(By.Id("loginPage_loginSubmit")).Click();
+                    driver.FindElement(By.Id("advancedButton")).Click();
+                    driver.FindElement(By.Id("exceptionDialogButton")).Click();
                 }
-                else
+                catch (Exception e)
                 {
-                    driver.FindElement(By.XPath("//*[@widgetid='loginPage_LoginButton']")).Click();
+                    MessageBox.Show($"Failed because {e}");
                 }
-            }
-            catch (NoSuchElementException)
-            {
-               MessageBox.Show("Cannot find the element by Xpath value given.");
+                if (driver.Title.Contains("Control Suite"))
+                {
+                    //Enter the username and password
+                    if (!ec8)
+                    {
+                        driver.FindElement(By.Id("label_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+                    }
+                    else
+                    {
+                        driver.FindElement(By.Id("loginPage_username")).SendKeys($"{uName}" + OpenQA.Selenium.Keys.Tab + $"{pw}");
+                    }
+                    //try to click the login button
+                    try
+                    {
+                        if (!ec8)
+                        {
+                            driver.FindElement(By.Id("loginPage_loginSubmit")).Click();
+                        }
+                        else
+                        {
+                            driver.FindElement(By.XPath("//*[@widgetid='loginPage_LoginButton']")).Click();
+                        }
+                    }
+                    catch (NoSuchElementException)
+                    {
+                        MessageBox.Show("Cannot find the element by Xpath value given.");
+                    }
+                }
+                //Store value of new window handle
+                string wHandle = driver.CurrentWindowHandle.ToString();
+                //add the controller name and the current window handle to a list
+                WindowHandles.Add(pubSvc.ControllerName, wHandle);
             }
         }
     }
