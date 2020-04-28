@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.Office.Interop.Excel;
 using System.Windows.Forms;
+using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+
 
 namespace buildEC
 {
@@ -87,8 +89,8 @@ namespace buildEC
                 svc.Qam.Port = Convert.ToString(excelWkSht.Range[cellName].Value);
                 cellName = getCell(Form1.controllerCol, row);
                 svc.ControllerName = Convert.ToString(excelWkSht.Range[cellName].Value);
-                cellName = getCell(Form1.sessionMacCol, row);
-                svc.SessionMAC = Convert.ToString(excelWkSht.Range[cellName].Value);
+                cellName = getCell(Form1.frequencyCol, row);
+                svc.Frequency = Convert.ToInt32(excelWkSht.Range[cellName].Value);
             }
             //if we encounter an error, return the partial information to be skipped in the main program
             catch(Exception e)
@@ -185,6 +187,65 @@ namespace buildEC
                 string wHandle = driver.CurrentWindowHandle.ToString();
                 //add the controller name and the current window handle to a list
                 WindowHandles.Add(pubSvc.ControllerName, wHandle);
+            }
+        }
+
+        //Method to switch to EC instance already open
+        public static void gotoEC()
+        {
+            string url;
+            bool ec8 = false;
+
+            if (!ECLIST.ContainsKey(pubSvc.ControllerName))
+            {
+                Form2 window = new Form2();
+                window.ShowDialog();
+            }
+
+            if (EC8.Contains(pubSvc.ControllerName))
+            {
+                url = @"https://" + ECLIST[pubSvc.ControllerName] + @"/dncs/src/sourceTable.do";
+                ec8 = true;
+            }
+            else
+            {
+                url = @"http://" + ECLIST[pubSvc.ControllerName] + @"/dncs/src/sourceTable.do";
+            }
+
+            if (WindowHandles.ContainsKey(pubSvc.ControllerName))
+            {
+                driver.SwitchTo().Window(WindowHandles[pubSvc.ControllerName]);
+            }
+            else
+            {
+                MessageBox.Show(@"Could not find the controller " + pubSvc.ControllerName + ".");
+            }
+
+        }
+
+        public static void selectSourceID(int sourceID)
+        {
+            int e = 1;
+            Thread.Sleep(2000);
+            try
+            {
+                //SelectElement select = new SelectElement(driver.FindElement(By.XPath("//*[@name='filterType']")));
+                //[namespace-uri()='http://www.w3.org/1999/xhtml']
+                IWebElement element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='action_panel']//*[local-name()='select'][@name='filterType']"));
+                SelectElement select = new SelectElement(element);
+                select.SelectByText("Source ID");
+                Thread.Sleep(2000);
+                e++;
+                driver.FindElement(By.XPath("//div[@class='filter_panel']/div/div/table.//input")).SendKeys(Convert.ToString(sourceID));
+                e++;
+                driver.FindElement(By.XPath("//div[@class='filter_panel']/div/div/table.//button")).Click();
+            }
+            catch (NoSuchElementException)
+            {
+                MessageBox.Show("Cannot find the element by Xpath value given. " + e);
+                Build.closeExcelFile();
+                Build.driver.Quit();
+                System.Windows.Forms.Application.Exit();
             }
         }
     }

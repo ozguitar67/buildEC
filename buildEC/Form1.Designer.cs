@@ -18,7 +18,7 @@
         static public string controllerCol;
         static public string ecUserName;
         static public string ecPassword;
-        static public string sessionMacCol;
+        static public string frequencyCol;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -71,8 +71,8 @@
             this.ecPasswordLbl = new System.Windows.Forms.Label();
             this.EcUserName = new System.Windows.Forms.TextBox();
             this.EcPassword = new System.Windows.Forms.TextBox();
-            this.SessionMacLbl = new System.Windows.Forms.Label();
-            this.SessionMacCol = new System.Windows.Forms.TextBox();
+            this.FrequencyLbl = new System.Windows.Forms.Label();
+            this.FrequencyCol = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -349,32 +349,32 @@
             this.EcPassword.UseSystemPasswordChar = true;
             this.EcPassword.WordWrap = false;
             // 
-            // SessionMacLbl
+            // FrequencyLbl
             // 
-            this.SessionMacLbl.AutoSize = true;
-            this.SessionMacLbl.Location = new System.Drawing.Point(470, 112);
-            this.SessionMacLbl.Name = "SessionMacLbl";
-            this.SessionMacLbl.Size = new System.Drawing.Size(70, 13);
-            this.SessionMacLbl.TabIndex = 28;
-            this.SessionMacLbl.Text = "Session MAC";
+            this.FrequencyLbl.AutoSize = true;
+            this.FrequencyLbl.Location = new System.Drawing.Point(470, 112);
+            this.FrequencyLbl.Name = "FrequencyLbl";
+            this.FrequencyLbl.Size = new System.Drawing.Size(57, 13);
+            this.FrequencyLbl.TabIndex = 28;
+            this.FrequencyLbl.Text = "Frequency";
             // 
-            // SessionMacCol
+            // FrequencyCol
             // 
-            this.SessionMacCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.SessionMacCol.Location = new System.Drawing.Point(546, 109);
-            this.SessionMacCol.MaxLength = 2;
-            this.SessionMacCol.Name = "SessionMacCol";
-            this.SessionMacCol.Size = new System.Drawing.Size(24, 20);
-            this.SessionMacCol.TabIndex = 29;
-            this.SessionMacCol.WordWrap = false;
+            this.FrequencyCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.FrequencyCol.Location = new System.Drawing.Point(533, 109);
+            this.FrequencyCol.MaxLength = 2;
+            this.FrequencyCol.Name = "FrequencyCol";
+            this.FrequencyCol.Size = new System.Drawing.Size(24, 20);
+            this.FrequencyCol.TabIndex = 29;
+            this.FrequencyCol.WordWrap = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 208);
-            this.Controls.Add(this.SessionMacCol);
-            this.Controls.Add(this.SessionMacLbl);
+            this.Controls.Add(this.FrequencyCol);
+            this.Controls.Add(this.FrequencyLbl);
             this.Controls.Add(this.EcPassword);
             this.Controls.Add(this.EcUserName);
             this.Controls.Add(this.ecPasswordLbl);
@@ -442,8 +442,8 @@
         private System.Windows.Forms.Label ecPasswordLbl;
         private System.Windows.Forms.TextBox EcUserName;
         private System.Windows.Forms.TextBox EcPassword;
-        private System.Windows.Forms.Label SessionMacLbl;
-        private System.Windows.Forms.TextBox SessionMacCol;
+        private System.Windows.Forms.Label FrequencyLbl;
+        private System.Windows.Forms.TextBox FrequencyCol;
     }
 }
 

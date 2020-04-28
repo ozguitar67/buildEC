@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace buildEC
 {
@@ -12,6 +11,7 @@ namespace buildEC
         //Keep a count of how many services that were created
         //Start at -1 because we create a public service in the Build class
         static private int count = -1;
+        private int _frequency;
         //Is this a valid service from the input given...?
         public bool isValidService
         {
@@ -34,7 +34,26 @@ namespace buildEC
         public string SourceName { get; set; }
         public int SourceId { get; set; }
         public string ControllerName { get; set; }
-        public string SessionMAC { get; set; }
+        //public string Frequency { get; set; }
+        public int Frequency
+        {
+            get
+            {
+                return this._frequency;
+            }
+            set
+            {
+                if (value > 1000000)
+                {
+                    this._frequency = value / 1000000;
+                }
+                else
+                {
+                    this._frequency = value;
+                }
+                
+            }
+        }
         
         public Qam Qam = new Qam();
 
@@ -43,7 +62,7 @@ namespace buildEC
         {
             bool isValid = true;
 
-            if (String.IsNullOrEmpty(this.SourceName) || !(this.SourceId > 0) || String.IsNullOrEmpty(Convert.ToString(this.SourceIp.Ip)) || String.IsNullOrEmpty(Convert.ToString(this.MulticastIp.Ip)) || !(this.UdpPort > 0) || !(this.ProgramNumber > 0) || !(this.Bandwidth > 0) || String.IsNullOrEmpty(this.Qam.Name) || !(this.Qam.getPortNumber() > 0) || String.IsNullOrEmpty(this.ControllerName))
+            if (String.IsNullOrEmpty(this.SourceName) || !(this.SourceId > 0) || String.IsNullOrEmpty(Convert.ToString(this.SourceIp.Ip)) || String.IsNullOrEmpty(Convert.ToString(this.MulticastIp.Ip)) || !(this.UdpPort > 0) || !(this.ProgramNumber > 0) || !(this.Bandwidth > 0) || String.IsNullOrEmpty(this.Qam.Name) || !(this.Qam.getPortNumber() > 0) || !(this.Frequency > 0))
             {
                 isValid = false;
                 count--;
