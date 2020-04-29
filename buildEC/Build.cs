@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using System.Threading;
 using Microsoft.Office.Interop.Excel;
 using System.Windows.Forms;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
-
+using Newtonsoft.Json;
+using System.Net;
 
 namespace buildEC
 {
@@ -19,6 +19,7 @@ namespace buildEC
         public static Worksheet excelWkSht = new Microsoft.Office.Interop.Excel.Worksheet();
         public static Service pubSvc = new Service();
         public static OpenQA.Selenium.IWebDriver driver;
+        private static List<Controller> JSON = new List<Controller>();
 
         //Lists to hold the controllers and their IPs
         //Second list contains EC8s that need https for the URL
@@ -66,6 +67,20 @@ namespace buildEC
             Build.closeExcelFile();
             Build.driver.Quit();
             System.Windows.Forms.Application.Exit();
+        }
+
+        //Method to convert created JSON to ChannelMapInfo class
+        public static void getJSON()
+        {
+            //This URL will most likely change
+            string httpJSON = new WebClient().DownloadString(@"http://10.34.107.47/NSGCHECK/sessionData.json");
+            JSON = JsonConvert.DeserializeObject<List<Controller>>(httpJSON);
+            /*
+            foreach (Controller c in JSON)
+            {
+                MessageBox.Show(c.controller);
+            }
+            */
         }
 
         //Method to get the service information from the excel file 
@@ -269,6 +284,7 @@ namespace buildEC
         //Method to get to the Source Definition page
         public static void gotoSourceDef()
         {
+            //consider adding logic to not renavigate if the source ID is the same as previous source ID
             try
             {
                 driver.FindElement(By.XPath("//*[local-name()='table'][@id='sourceTable']//*[local-name()='input'][@type='checkbox']")).Click();

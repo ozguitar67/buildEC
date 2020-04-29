@@ -101,7 +101,7 @@ namespace buildEC
                         blankLines++;
                         continue;
                     }
-                    //MessageBox.Show($"{Build.pubSvc.SourceName} {Build.pubSvc.SourceId} {Convert.ToString(Build.pubSvc.SourceIp.Ip)} {Convert.ToString(Build.pubSvc.MulticastIp.Ip)} {Build.pubSvc.UdpPort} {Build.pubSvc.ProgramNumber} {Build.pubSvc.Bandwidth} {Build.pubSvc.Qam.Name} {Build.pubSvc.Qam.Port}");
+                    
                     //Find if the controller for this service is already open
                     if (!workList.Contains(Build.pubSvc.ControllerName))
                     {
@@ -116,8 +116,6 @@ namespace buildEC
                     Build.gotoSourceDef();
                 }
 
-                
-                //Build.gotoEC(Build.pubSvc.ControllerName, ecUserName, ecPassword);
                 Thread.Sleep(2500);
             }
             finally

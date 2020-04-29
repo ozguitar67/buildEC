@@ -41,6 +41,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Build.getJSON();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.textBox1 = new System.Windows.Forms.TextBox();
