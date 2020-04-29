@@ -19,36 +19,35 @@ namespace buildEC
         public static Worksheet excelWkSht = new Microsoft.Office.Interop.Excel.Worksheet();
         public static Service pubSvc = new Service();
         public static OpenQA.Selenium.IWebDriver driver;
+
         //Lists to hold the controllers and their IPs
         //Second list contains EC8s that need https for the URL
         public static readonly SortedList<string, string> ECLIST = new SortedList<string,string>() { { "CPA1", "10.34.107.194" }, { "CPA2", "10.34.107.202" }, { "Pitt", "10.34.95.210" }, { "Cherry Hill", "10.35.92.58" }, { "Monmouth", "10.35.89.66" }, { "Alexandria", "10.32.230.82" }, { "Carroll", "10.32.230.42" }, { "Chesterfield", "10.33.203.50" }, { "Dale City", "10.32.230.90" }, { "Dover", "10.32.230.50" }, { "Howard", "10.32.230.66" }, { "Staunton", "10.33.203.58" }, { "Hamden", "172.21.161.130" }, { "Londonderry", "172.21.77.66" }, { "Plymouth", "172.21.77.74" } };
         public static readonly List<string> EC8 = new List<string>() { "Cherry Hill", "Chesterfield", "Hamden", "Londonderry", "Plymouth" };
+
         //List to keep track of windows opened and which controller they are for to switch back if needed
         public static SortedList<string, string> WindowHandles = new SortedList<string, string>();
+
         //Method to instantiate a browser with the correct options set to access the ECs
-        static public void initBrowser()
+        public static void initBrowser()
         {
             //Set encoding to avoid "encoding 437" error
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             FirefoxOptions options = new FirefoxOptions();
             FirefoxProfile profile = new FirefoxProfile();
             profile.DeleteAfterUse = true;
+            //Set preferences to allow EC pages to display
             profile.SetPreference("security.ssl3.dhe_rsa_aes_128_sha", false);
             profile.SetPreference("security.ssl3.dhe_rsa_aes_256_sha", false);
-            /*  Attempt to change settings to open new windows in tabs
-             *  It did not work...
-            //Change setting so that new windows open in a new tab...?
-            profile.SetPreference("browser.link.open_newwindow", 3);
-            profile.SetPreference("browser.link.open_newwindow.restriction", 0);
-            profile.SetPreference("browser.link.open_newwindow.override.external", 3);
-            profile.SetPreference("browser.urlbar.openintab", true); 
-            */
             options.Profile = profile;
-            driver = new FirefoxDriver(options);
+            //Create Firefox service to hide console window for webdriver
+            FirefoxDriverService ffService = FirefoxDriverService.CreateDefaultService();
+            ffService.HideCommandPromptWindow = true;
+            driver = new FirefoxDriver(ffService, options);
         }
 
         //Method to open the chosen excel file in a hidden application
-        static public void openExcelFile(string fileName)
+        public static void openExcelFile(string fileName)
         {
             //excelApp.Visible = false;
             excelApp.Workbooks.Open(fileName);
@@ -56,14 +55,22 @@ namespace buildEC
         }
 
         //Method to close the excel application
-        static public void closeExcelFile()
+        public static void closeExcelFile()
         {
             excelApp.Quit();
         }
 
+        //Method to quit application and close resources
+        private static void exitApp()
+        {
+            Build.closeExcelFile();
+            Build.driver.Quit();
+            System.Windows.Forms.Application.Exit();
+        }
+
         //Method to get the service information from the excel file 
         //and assign the values to the correct variables
-        static public Service getService(int row)
+        public static Service getService(int row)
         {
             Service svc = new Service();
 
@@ -116,8 +123,10 @@ namespace buildEC
 
             if (!ECLIST.ContainsKey(pubSvc.ControllerName))
             {
+                Form1.workList.Remove(pubSvc.ControllerName);
                 Form2 window = new Form2();
                 window.ShowDialog();
+                Form1.workList.Add(pubSvc.ControllerName);
             }
 
             if (EC8.Contains(pubSvc.ControllerName))
@@ -154,6 +163,7 @@ namespace buildEC
                 catch (Exception e)
                 {
                     MessageBox.Show($"Failed because {e}");
+                    exitApp();
                 }
                 if (driver.Title.Contains("Control Suite"))
                 {
@@ -181,6 +191,7 @@ namespace buildEC
                     catch (NoSuchElementException)
                     {
                         MessageBox.Show("Cannot find the element by Xpath value given.");
+                        exitApp();
                     }
                 }
                 //Store value of new window handle
@@ -198,8 +209,10 @@ namespace buildEC
 
             if (!ECLIST.ContainsKey(pubSvc.ControllerName))
             {
+                Form1.workList.Remove(pubSvc.ControllerName);
                 Form2 window = new Form2();
                 window.ShowDialog();
+                Form1.workList.Add(pubSvc.ControllerName);
             }
 
             if (EC8.Contains(pubSvc.ControllerName))
@@ -215,37 +228,56 @@ namespace buildEC
             if (WindowHandles.ContainsKey(pubSvc.ControllerName))
             {
                 driver.SwitchTo().Window(WindowHandles[pubSvc.ControllerName]);
+                driver.Navigate().GoToUrl($"{url}");
             }
             else
             {
                 MessageBox.Show(@"Could not find the controller " + pubSvc.ControllerName + ".");
+                exitApp();
             }
 
         }
 
+        //Method to change wait time for trying to find an element on the page
+        private static void changeWaitTime(int seconds)
+        {
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(seconds);
+        }
+
+        //Method to select the source ID in the EC
         public static void selectSourceID(int sourceID)
         {
-            int e = 1;
-            Thread.Sleep(2000);
             try
             {
-                //SelectElement select = new SelectElement(driver.FindElement(By.XPath("//*[@name='filterType']")));
-                //[namespace-uri()='http://www.w3.org/1999/xhtml']
+                changeWaitTime(15);
                 IWebElement element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='action_panel']//*[local-name()='select'][@name='filterType']"));
                 SelectElement select = new SelectElement(element);
-                select.SelectByText("Source ID");
-                Thread.Sleep(2000);
-                e++;
-                driver.FindElement(By.XPath("//div[@class='filter_panel']/div/div/table.//input")).SendKeys(Convert.ToString(sourceID));
-                e++;
-                driver.FindElement(By.XPath("//div[@class='filter_panel']/div/div/table.//button")).Click();
+                select.SelectByIndex(1);
+                element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='filter_panel']//*[local-name()='input'][@id='valInput']"));
+                changeWaitTime(0);
+                element.Clear();
+                element.SendKeys(Convert.ToString(sourceID));
+                driver.FindElement(By.XPath("//*[local-name()='div'][@class='filter_panel']//*[local-name()='button']")).Click();
             }
             catch (NoSuchElementException)
             {
-                MessageBox.Show("Cannot find the element by Xpath value given. " + e);
-                Build.closeExcelFile();
-                Build.driver.Quit();
-                System.Windows.Forms.Application.Exit();
+                MessageBox.Show("Element searched for not found");
+                exitApp();
+            }
+        }
+
+        //Method to get to the Source Definition page
+        public static void gotoSourceDef()
+        {
+            try
+            {
+                driver.FindElement(By.XPath("//*[local-name()='table'][@id='sourceTable']//*[local-name()='input'][@type='checkbox']")).Click();
+                driver.FindElement(By.XPath("//*[local-name()='div'][@class='action_body']//*[contains(@onclick,'startDef')]")).Click();
+            }
+            catch (NoSuchElementException)
+            {
+                MessageBox.Show("Element searched for could not be found");
+                exitApp();
             }
         }
     }
