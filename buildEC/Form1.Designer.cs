@@ -19,6 +19,7 @@
         static public string ecUserName;
         static public string ecPassword;
         static public string frequencyCol;
+        static public string dtaServiceCol;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -74,12 +75,14 @@
             this.EcPassword = new System.Windows.Forms.TextBox();
             this.FrequencyLbl = new System.Windows.Forms.Label();
             this.FrequencyCol = new System.Windows.Forms.TextBox();
+            this.DTAserviceLbl = new System.Windows.Forms.Label();
+            this.DTAservCol = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
             // 
-            //this.openFileDialog1.FileName = "Browse for Excel File";
-            this.openFileDialog1.FileName = @"C:\OneDrive - Comcast\SMOPs\2020\03-26_ATT Sports Overflow Launch_NEDCA-16807\ATTPIT Test2.xlsx";
+            this.openFileDialog1.FileName = "C:\\OneDrive - Comcast\\SMOPs\\2020\\03-26_ATT Sports Overflow Launch_NEDCA-16807\\ATT" +
+    "PIT Test2.xlsx";
             this.openFileDialog1.Filter = "\"Excel files|*.xls,*.xlsx|All files|*.*\"";
             this.openFileDialog1.InitialDirectory = "C:\\";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
@@ -88,14 +91,14 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(12, 19);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(462, 20);
+            this.textBox1.Size = new System.Drawing.Size(502, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = this.openFileDialog1.FileName;
             this.textBox1.WordWrap = false;
             // 
             // browseBtn
             // 
-            this.browseBtn.Location = new System.Drawing.Point(480, 19);
+            this.browseBtn.Location = new System.Drawing.Point(520, 19);
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(112, 20);
             this.browseBtn.TabIndex = 1;
@@ -110,7 +113,7 @@
             this.button1.Location = new System.Drawing.Point(238, 145);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(104, 52);
-            this.button1.TabIndex = 2;
+            this.button1.TabIndex = 30;
             this.button1.Text = "Go!";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -121,7 +124,7 @@
             this.SourceNameLbl.Location = new System.Drawing.Point(13, 81);
             this.SourceNameLbl.Name = "SourceNameLbl";
             this.SourceNameLbl.Size = new System.Drawing.Size(72, 13);
-            this.SourceNameLbl.TabIndex = 3;
+            this.SourceNameLbl.TabIndex = 2;
             this.SourceNameLbl.Text = "Source Name";
             // 
             // SrcNmCol
@@ -131,7 +134,7 @@
             this.SrcNmCol.MaxLength = 2;
             this.SrcNmCol.Name = "SrcNmCol";
             this.SrcNmCol.Size = new System.Drawing.Size(24, 20);
-            this.SrcNmCol.TabIndex = 4;
+            this.SrcNmCol.TabIndex = 3;
             this.SrcNmCol.WordWrap = false;
             // 
             // SourceIdLbl
@@ -140,7 +143,7 @@
             this.SourceIdLbl.Location = new System.Drawing.Point(122, 81);
             this.SourceIdLbl.Name = "SourceIdLbl";
             this.SourceIdLbl.Size = new System.Drawing.Size(55, 13);
-            this.SourceIdLbl.TabIndex = 5;
+            this.SourceIdLbl.TabIndex = 4;
             this.SourceIdLbl.Text = "Source ID";
             // 
             // SrcIdCol
@@ -150,7 +153,7 @@
             this.SrcIdCol.MaxLength = 2;
             this.SrcIdCol.Name = "SrcIdCol";
             this.SrcIdCol.Size = new System.Drawing.Size(24, 20);
-            this.SrcIdCol.TabIndex = 6;
+            this.SrcIdCol.TabIndex = 5;
             this.SrcIdCol.WordWrap = false;
             // 
             // SourceIpLbl
@@ -159,7 +162,7 @@
             this.SourceIpLbl.Location = new System.Drawing.Point(213, 81);
             this.SourceIpLbl.Name = "SourceIpLbl";
             this.SourceIpLbl.Size = new System.Drawing.Size(54, 13);
-            this.SourceIpLbl.TabIndex = 7;
+            this.SourceIpLbl.TabIndex = 6;
             this.SourceIpLbl.Text = "Source IP";
             // 
             // SrcIpCol
@@ -169,7 +172,7 @@
             this.SrcIpCol.MaxLength = 2;
             this.SrcIpCol.Name = "SrcIpCol";
             this.SrcIpCol.Size = new System.Drawing.Size(24, 20);
-            this.SrcIpCol.TabIndex = 8;
+            this.SrcIpCol.TabIndex = 7;
             this.SrcIpCol.WordWrap = false;
             // 
             // mCastIpLbl
@@ -178,7 +181,7 @@
             this.mCastIpLbl.Location = new System.Drawing.Point(303, 81);
             this.mCastIpLbl.Name = "mCastIpLbl";
             this.mCastIpLbl.Size = new System.Drawing.Size(62, 13);
-            this.mCastIpLbl.TabIndex = 9;
+            this.mCastIpLbl.TabIndex = 8;
             this.mCastIpLbl.Text = "Multicast IP";
             // 
             // MulticastIpCol
@@ -188,7 +191,7 @@
             this.MulticastIpCol.MaxLength = 2;
             this.MulticastIpCol.Name = "MulticastIpCol";
             this.MulticastIpCol.Size = new System.Drawing.Size(24, 20);
-            this.MulticastIpCol.TabIndex = 10;
+            this.MulticastIpCol.TabIndex = 9;
             this.MulticastIpCol.WordWrap = false;
             // 
             // UdpLbl
@@ -197,7 +200,7 @@
             this.UdpLbl.Location = new System.Drawing.Point(401, 81);
             this.UdpLbl.Name = "UdpLbl";
             this.UdpLbl.Size = new System.Drawing.Size(52, 13);
-            this.UdpLbl.TabIndex = 11;
+            this.UdpLbl.TabIndex = 10;
             this.UdpLbl.Text = "UDP Port";
             // 
             // UdpCol
@@ -207,26 +210,26 @@
             this.UdpCol.MaxLength = 2;
             this.UdpCol.Name = "UdpCol";
             this.UdpCol.Size = new System.Drawing.Size(24, 20);
-            this.UdpCol.TabIndex = 12;
+            this.UdpCol.TabIndex = 11;
             this.UdpCol.WordWrap = false;
             // 
             // BwLbl
             // 
             this.BwLbl.AutoSize = true;
-            this.BwLbl.Location = new System.Drawing.Point(489, 81);
+            this.BwLbl.Location = new System.Drawing.Point(348, 112);
             this.BwLbl.Name = "BwLbl";
             this.BwLbl.Size = new System.Drawing.Size(57, 13);
-            this.BwLbl.TabIndex = 13;
+            this.BwLbl.TabIndex = 20;
             this.BwLbl.Text = "Bandwidth";
             // 
             // BwCol
             // 
             this.BwCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.BwCol.Location = new System.Drawing.Point(552, 78);
+            this.BwCol.Location = new System.Drawing.Point(411, 109);
             this.BwCol.MaxLength = 2;
             this.BwCol.Name = "BwCol";
             this.BwCol.Size = new System.Drawing.Size(24, 20);
-            this.BwCol.TabIndex = 14;
+            this.BwCol.TabIndex = 21;
             this.BwCol.WordWrap = false;
             // 
             // QamNameLbl
@@ -235,7 +238,7 @@
             this.QamNameLbl.Location = new System.Drawing.Point(13, 112);
             this.QamNameLbl.Name = "QamNameLbl";
             this.QamNameLbl.Size = new System.Drawing.Size(72, 13);
-            this.QamNameLbl.TabIndex = 15;
+            this.QamNameLbl.TabIndex = 14;
             this.QamNameLbl.Text = "Device Name";
             // 
             // DeviceCol
@@ -245,7 +248,7 @@
             this.DeviceCol.MaxLength = 2;
             this.DeviceCol.Name = "DeviceCol";
             this.DeviceCol.Size = new System.Drawing.Size(24, 20);
-            this.DeviceCol.TabIndex = 16;
+            this.DeviceCol.TabIndex = 15;
             this.DeviceCol.WordWrap = false;
             // 
             // PortLbl
@@ -254,7 +257,7 @@
             this.PortLbl.Location = new System.Drawing.Point(122, 112);
             this.PortLbl.Name = "PortLbl";
             this.PortLbl.Size = new System.Drawing.Size(103, 13);
-            this.PortLbl.TabIndex = 17;
+            this.PortLbl.TabIndex = 16;
             this.PortLbl.Text = "Device Port Number";
             // 
             // PortCol
@@ -264,45 +267,45 @@
             this.PortCol.MaxLength = 2;
             this.PortCol.Name = "PortCol";
             this.PortCol.Size = new System.Drawing.Size(24, 20);
-            this.PortCol.TabIndex = 18;
+            this.PortCol.TabIndex = 17;
             this.PortCol.WordWrap = false;
             // 
             // ProgNumLbl
             // 
             this.ProgNumLbl.AutoSize = true;
-            this.ProgNumLbl.Location = new System.Drawing.Point(261, 112);
+            this.ProgNumLbl.Location = new System.Drawing.Point(489, 81);
             this.ProgNumLbl.Name = "ProgNumLbl";
             this.ProgNumLbl.Size = new System.Drawing.Size(86, 13);
-            this.ProgNumLbl.TabIndex = 19;
+            this.ProgNumLbl.TabIndex = 12;
             this.ProgNumLbl.Text = "Program Number";
             // 
             // ProgNumCol
             // 
             this.ProgNumCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.ProgNumCol.Location = new System.Drawing.Point(353, 109);
+            this.ProgNumCol.Location = new System.Drawing.Point(581, 78);
             this.ProgNumCol.MaxLength = 2;
             this.ProgNumCol.Name = "ProgNumCol";
             this.ProgNumCol.Size = new System.Drawing.Size(24, 20);
-            this.ProgNumCol.TabIndex = 20;
+            this.ProgNumCol.TabIndex = 13;
             this.ProgNumCol.WordWrap = false;
             // 
             // ControllerLbl
             // 
             this.ControllerLbl.AutoSize = true;
-            this.ControllerLbl.Location = new System.Drawing.Point(383, 112);
+            this.ControllerLbl.Location = new System.Drawing.Point(261, 112);
             this.ControllerLbl.Name = "ControllerLbl";
             this.ControllerLbl.Size = new System.Drawing.Size(51, 13);
-            this.ControllerLbl.TabIndex = 26;
+            this.ControllerLbl.TabIndex = 18;
             this.ControllerLbl.Text = "Controller";
             // 
             // ControllerCol
             // 
             this.ControllerCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.ControllerCol.Location = new System.Drawing.Point(440, 109);
+            this.ControllerCol.Location = new System.Drawing.Point(318, 109);
             this.ControllerCol.MaxLength = 2;
             this.ControllerCol.Name = "ControllerCol";
             this.ControllerCol.Size = new System.Drawing.Size(24, 20);
-            this.ControllerCol.TabIndex = 27;
+            this.ControllerCol.TabIndex = 19;
             this.ControllerCol.WordWrap = false;
             // 
             // label1
@@ -311,70 +314,91 @@
             this.label1.Location = new System.Drawing.Point(86, 52);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(357, 13);
-            this.label1.TabIndex = 21;
+            this.label1.TabIndex = 31;
             this.label1.Text = "Enter the column letters from the spreadsheet for each piece of information";
             // 
             // ecUserNameLbl
             // 
             this.ecUserNameLbl.AutoSize = true;
-            this.ecUserNameLbl.Location = new System.Drawing.Point(393, 145);
+            this.ecUserNameLbl.Location = new System.Drawing.Point(393, 153);
             this.ecUserNameLbl.Name = "ecUserNameLbl";
             this.ecUserNameLbl.Size = new System.Drawing.Size(60, 13);
-            this.ecUserNameLbl.TabIndex = 22;
+            this.ecUserNameLbl.TabIndex = 26;
             this.ecUserNameLbl.Text = "User Name";
             // 
             // ecPasswordLbl
             // 
             this.ecPasswordLbl.AutoSize = true;
-            this.ecPasswordLbl.Location = new System.Drawing.Point(393, 170);
+            this.ecPasswordLbl.Location = new System.Drawing.Point(393, 179);
             this.ecPasswordLbl.Name = "ecPasswordLbl";
             this.ecPasswordLbl.Size = new System.Drawing.Size(53, 13);
-            this.ecPasswordLbl.TabIndex = 23;
+            this.ecPasswordLbl.TabIndex = 28;
             this.ecPasswordLbl.Text = "Password";
             // 
             // EcUserName
             // 
-            this.EcUserName.Location = new System.Drawing.Point(459, 138);
+            this.EcUserName.Location = new System.Drawing.Point(459, 150);
             this.EcUserName.MaxLength = 30;
             this.EcUserName.Name = "EcUserName";
             this.EcUserName.Size = new System.Drawing.Size(117, 20);
-            this.EcUserName.TabIndex = 24;
+            this.EcUserName.TabIndex = 27;
             this.EcUserName.WordWrap = false;
             // 
             // EcPassword
             // 
-            this.EcPassword.Location = new System.Drawing.Point(459, 167);
+            this.EcPassword.Location = new System.Drawing.Point(459, 176);
             this.EcPassword.MaxLength = 64;
             this.EcPassword.Name = "EcPassword";
             this.EcPassword.Size = new System.Drawing.Size(117, 20);
-            this.EcPassword.TabIndex = 25;
+            this.EcPassword.TabIndex = 29;
             this.EcPassword.UseSystemPasswordChar = true;
             this.EcPassword.WordWrap = false;
             // 
             // FrequencyLbl
             // 
             this.FrequencyLbl.AutoSize = true;
-            this.FrequencyLbl.Location = new System.Drawing.Point(470, 112);
+            this.FrequencyLbl.Location = new System.Drawing.Point(441, 112);
             this.FrequencyLbl.Name = "FrequencyLbl";
             this.FrequencyLbl.Size = new System.Drawing.Size(57, 13);
-            this.FrequencyLbl.TabIndex = 28;
+            this.FrequencyLbl.TabIndex = 22;
             this.FrequencyLbl.Text = "Frequency";
             // 
             // FrequencyCol
             // 
             this.FrequencyCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.FrequencyCol.Location = new System.Drawing.Point(533, 109);
+            this.FrequencyCol.Location = new System.Drawing.Point(504, 109);
             this.FrequencyCol.MaxLength = 2;
             this.FrequencyCol.Name = "FrequencyCol";
             this.FrequencyCol.Size = new System.Drawing.Size(24, 20);
-            this.FrequencyCol.TabIndex = 29;
+            this.FrequencyCol.TabIndex = 23;
             this.FrequencyCol.WordWrap = false;
+            // 
+            // DTAserviceLbl
+            // 
+            this.DTAserviceLbl.AutoSize = true;
+            this.DTAserviceLbl.Location = new System.Drawing.Point(534, 112);
+            this.DTAserviceLbl.Name = "DTAserviceLbl";
+            this.DTAserviceLbl.Size = new System.Drawing.Size(68, 13);
+            this.DTAserviceLbl.TabIndex = 24;
+            this.DTAserviceLbl.Text = "DTA Service";
+            // 
+            // DTAservCol
+            // 
+            this.DTAservCol.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.DTAservCol.Location = new System.Drawing.Point(608, 109);
+            this.DTAservCol.MaxLength = 2;
+            this.DTAservCol.Name = "DTAservCol";
+            this.DTAservCol.Size = new System.Drawing.Size(24, 20);
+            this.DTAservCol.TabIndex = 25;
+            this.DTAservCol.WordWrap = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 208);
+            this.ClientSize = new System.Drawing.Size(656, 208);
+            this.Controls.Add(this.DTAservCol);
+            this.Controls.Add(this.DTAserviceLbl);
             this.Controls.Add(this.FrequencyCol);
             this.Controls.Add(this.FrequencyLbl);
             this.Controls.Add(this.EcPassword);
@@ -446,6 +470,8 @@
         private System.Windows.Forms.TextBox EcPassword;
         private System.Windows.Forms.Label FrequencyLbl;
         private System.Windows.Forms.TextBox FrequencyCol;
+        private System.Windows.Forms.Label DTAserviceLbl;
+        private System.Windows.Forms.TextBox DTAservCol;
     }
 }
 

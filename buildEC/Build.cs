@@ -9,6 +9,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using Newtonsoft.Json;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace buildEC
 {
@@ -19,7 +20,7 @@ namespace buildEC
         public static Worksheet excelWkSht = new Microsoft.Office.Interop.Excel.Worksheet();
         public static Service pubSvc = new Service();
         public static OpenQA.Selenium.IWebDriver driver;
-        private static List<Controller> JSON = new List<Controller>();
+        public static List<Controller> JSON = new List<Controller>();
 
         //Lists to hold the controllers and their IPs
         //Second list contains EC8s that need https for the URL
@@ -50,9 +51,18 @@ namespace buildEC
         //Method to open the chosen excel file in a hidden application
         public static void openExcelFile(string fileName)
         {
-            //excelApp.Visible = false;
-            excelApp.Workbooks.Open(fileName);
-            excelWkSht = excelApp.ActiveSheet;
+            try
+            {
+                //excelApp.Visible = false;
+                excelApp.Workbooks.Open(fileName);
+                excelWkSht = excelApp.ActiveSheet;
+            }
+            catch (System.InvalidCastException)
+            {
+                MessageBox.Show("Cannot access the workbook " + fileName);
+                exitApp();
+            }
+
         }
 
         //Method to close the excel application
@@ -113,6 +123,8 @@ namespace buildEC
                 svc.ControllerName = Convert.ToString(excelWkSht.Range[cellName].Value);
                 cellName = getCell(Form1.frequencyCol, row);
                 svc.Frequency = Convert.ToInt32(excelWkSht.Range[cellName].Value);
+                cellName = getCell(Form1.dtaServiceCol, row);
+                svc.dtaServiceKa(Convert.ToString(excelWkSht.Range[cellName].Value));
             }
             //if we encounter an error, return the partial information to be skipped in the main program
             catch(Exception e)
@@ -295,6 +307,50 @@ namespace buildEC
                 MessageBox.Show("Element searched for could not be found");
                 exitApp();
             }
+        }
+
+        public static void buildService()
+        {
+            SourceDef definition = new SourceDef();
+            definition.GetSourceDefs();
+
+            if (!definition.PcgExists())
+            {
+                if (!definition.PCGone && definition.PCGtwo)
+                {
+                    buildPCG(1);
+                }
+                else if (definition.PCGone && !definition.PCGtwo)
+                {
+                    buildPCG(2);
+                }
+                else
+                {
+                    buildPCG(1);
+                    buildPCG(2);
+                }
+            }
+        }
+
+        private static void buildPCG(int p)
+        {
+            string pcgS = Regex.Replace(pubSvc.PCGsession, "(^[0-9]{2}:F[0-9]:0)0", "$1" + "1");
+            Build.driver.FindElement(By.XPath("//*[local-name()='button'][@value='Add']")).Click();
+            IWebElement element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'type')]"));
+            SelectElement srcDefType = new SelectElement(element);
+            srcDefType.SelectByIndex(3);
+            element = driver.FindElement(By.XPath("//*[local-name()='input'][@id='mac_address'][contains(@name,'pcg')]"));
+            element.Clear();
+            element.SendKeys(pcgS);
+            element = driver.FindElement(By.XPath("//*[local-name()='input'][contains(@name,'pcgSessionNumber')]"));
+            element.Clear();
+            element.SendKeys(Convert.ToString(pubSvc.SourceId));
+            element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'pcgName')]"));
+            SelectElement pcgName = new SelectElement(element);
+            int pcgIdx = ((Convert.ToInt32(Regex.Replace(pubSvc.PCGsession, "00:F([0-9]):00:00:00:00", "$1")) - 1) * 2) + p;
+            pcgName.SelectByIndex(pcgIdx);
+            driver.FindElement(By.XPath("//*[local-name()='input'][contains(@name,'SourceId')]")).Click();
+            driver.FindElement(By.XPath("//*[local-name()='button'][@value='Save']")).Click();
         }
     }
 }

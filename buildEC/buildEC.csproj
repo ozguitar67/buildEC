@@ -77,16 +77,41 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="HubForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HubForm.Designer.cs">
+      <DependentUpon>HubForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ipAddress.cs" />
+    <Compile Include="PCGForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PCGForm.Designer.cs">
+      <DependentUpon>PCGForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qam.cs" />
+    <Compile Include="QamSessionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QamSessionForm.Designer.cs">
+      <DependentUpon>QamSessionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="service.cs" />
+    <Compile Include="SourceDef.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HubForm.resx">
+      <DependentUpon>HubForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PCGForm.resx">
+      <DependentUpon>PCGForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -97,6 +122,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="QamSessionForm.resx">
+      <DependentUpon>QamSessionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

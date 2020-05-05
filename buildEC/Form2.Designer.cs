@@ -30,6 +30,7 @@ namespace buildEC
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.EcListDropDown = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -37,24 +38,12 @@ namespace buildEC
             // 
             // EcListDropDown
             // 
-            // ***** To make changes in the form designer, remove this extra code and add it back *****
-            IList<string> keys = Build.ECLIST.Keys;
-            int arraySize = Build.ECLIST.Count;
-            string[] ecList = new string[arraySize];
-            int idx = 0;
-            foreach (string s in keys)
-            {
-                ecList[idx] = s;
-                idx++;
-            }
-
             this.EcListDropDown.AllowDrop = true;
             this.EcListDropDown.FormattingEnabled = true;
             this.EcListDropDown.Location = new System.Drawing.Point(41, 49);
             this.EcListDropDown.Name = "EcListDropDown";
             this.EcListDropDown.Size = new System.Drawing.Size(147, 21);
             this.EcListDropDown.TabIndex = 0;
-            this.EcListDropDown.Items.AddRange(ecList);
             // 
             // label1
             // 
@@ -63,8 +52,7 @@ namespace buildEC
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(329, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Cannot find " + Build.pubSvc.ControllerName + " in the list of ECs. Please choose one from the list below.";
-            // ***** To here *****
+            this.label1.Text = "Cannot find  in the list of ECs. Please choose one from the list below.";
             // 
             // button1
             // 
@@ -84,8 +72,9 @@ namespace buildEC
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.EcListDropDown);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
-            this.Text = "Form2";
+            this.Text = "Explorer Controller Not Found";
             this.ResumeLayout(false);
             this.PerformLayout();
 

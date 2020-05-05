@@ -67,6 +67,7 @@ namespace buildEC
             PortCol.Text = "H";
             ControllerCol.Text = "J";
             FrequencyCol.Text = "N";
+            DTAservCol.Text = "P";
 
             //Assign all column values to pull cell values
             sourceNameCol = SrcNmCol.Text.ToString();
@@ -80,6 +81,7 @@ namespace buildEC
             portCol = PortCol.Text.ToString();
             controllerCol = ControllerCol.Text.ToString();
             frequencyCol = FrequencyCol.Text.ToString();
+            dtaServiceCol = DTAservCol.Text.ToString();
             ecUserName = EcUserName.Text.ToString();
             ecPassword = EcPassword.Text.ToString();
             //Hide form after button is clicked to remove from view
@@ -101,7 +103,14 @@ namespace buildEC
                         blankLines++;
                         continue;
                     }
-                    
+
+                    string hub = Build.pubSvc.DefaultHub;
+                    string p = Build.pubSvc.PCGsession;
+                    if (hub == "0" || hub.Length == 0)
+                    {
+                        Build.pubSvc.chooseDefaultHub();
+                    }
+
                     //Find if the controller for this service is already open
                     if (!workList.Contains(Build.pubSvc.ControllerName))
                     {
