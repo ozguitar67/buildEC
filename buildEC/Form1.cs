@@ -56,19 +56,19 @@ namespace buildEC
             */
 
             //Set these values for testing
-            SrcNmCol.Text = "A";
-            SrcIdCol.Text = "B";
-            SrcIpCol.Text = "C";
-            MulticastIpCol.Text = "D";
-            UdpCol.Text = "E";
-            ProgNumCol.Text = "I";
-            BwCol.Text = "F";
-            DeviceCol.Text = "G";
-            PortCol.Text = "H";
-            ControllerCol.Text = "J";
-            FrequencyCol.Text = "N";
-            DTAservCol.Text = "P";
-
+            SrcNmCol.Text = "D";
+            SrcIdCol.Text = "F";
+            SrcIpCol.Text = "V";
+            MulticastIpCol.Text = "W";
+            UdpCol.Text = "X";
+            ProgNumCol.Text = "AF";
+            BwCol.Text = "I";
+            DeviceCol.Text = "AA";
+            PortCol.Text = "AE";
+            ControllerCol.Text = "A";
+            FrequencyCol.Text = "AH";
+            DTAservCol.Text = "G";
+            
             //Assign all column values to pull cell values
             sourceNameCol = SrcNmCol.Text.ToString();
             sourceIdCol = SrcIdCol.Text.ToString();
@@ -103,7 +103,7 @@ namespace buildEC
                         blankLines++;
                         continue;
                     }
-
+                    //Assign values to local variables to force validation
                     string hub = Build.pubSvc.DefaultHub;
                     string p = Build.pubSvc.PCGsession;
                     if (hub == "0" || hub.Length == 0)
@@ -123,6 +123,7 @@ namespace buildEC
                     }
                     Build.selectSourceID(Build.pubSvc.SourceId);
                     Build.gotoSourceDef();
+                    Build.buildService();
                 }
 
                 Thread.Sleep(2500);

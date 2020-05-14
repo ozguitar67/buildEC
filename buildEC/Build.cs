@@ -11,6 +11,7 @@ using OpenQA.Selenium.Firefox;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace buildEC
 {
@@ -280,21 +281,6 @@ namespace buildEC
                 changeWaitTime(15);
                 IWebElement element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='action_panel']//*[local-name()='select'][@name='filterType']"));
                 SelectElement select = new SelectElement(element);
-                /*  SelecyByText not working due to XMLNS workaround option, until I tried SelectByIndex
-                List<IWebElement> options = new List<IWebElement>();
-                ReadOnlyCollection<IWebElement> selectOptions = new ReadOnlyCollection<IWebElement>(options);
-                selectOptions = driver.FindElements(By.XPath("//*[local-name()='div'][@class='action_panel']//*[local-name()='select'][@name='filterType']/*"));
-                int optionIndex = 0;
-                foreach (IWebElement e in selectOptions)
-                {
-                    if (e.Text == "Source ID")
-                    {
-                        break;
-                    }
-                    optionIndex++;
-                }
-                select.SelectByIndex(optionIndex);
-                */
                 select.SelectByIndex(1);
                 element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='filter_panel']//*[local-name()='input'][@id='valInput']"));
                 changeWaitTime(0);
@@ -361,78 +347,69 @@ namespace buildEC
         //Method to build and save PCG session
         private static void buildPCG(int p)
         {
-            string pcgS = Regex.Replace(pubSvc.PCGsession, "(^[0-9]{2}:F[0-9]:0)0", "$1" + "1");
+            string pcgS = Regex.Replace(pubSvc.PCGsession, "(^[0-9]{2}:F[0-9]:0)0", "${1}" + Convert.ToString(p));
             driver.FindElement(By.XPath("//*[local-name()='button'][@value='Add']")).Click();
             IWebElement element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'type')]"));
             SelectElement srcDefType = new SelectElement(element);
-            srcDefType.SelectByIndex(3);
+            srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "PCG"));
             enterInputData("//*[local-name()='input'][@id='mac_address'][contains(@name,'pcg')]", pcgS);
             enterInputData("//*[local-name()='input'][contains(@name,'pcgSessionNumber')]", Convert.ToString(pubSvc.SourceId));
             element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'pcgName')]"));
             SelectElement pcgName = new SelectElement(element);
-            int pcgIdx = ((Convert.ToInt32(Regex.Replace(pubSvc.PCGsession, "00:F([0-9]):00:00:00:00", "$1")) - 1) * 2) + p;
+            int pcgIdx = ((Convert.ToInt32(Regex.Replace(pubSvc.PCGsession, "00:F([0-9]):00:00:00:00", "${1}")) - 1) * 2) + p;
             pcgName.SelectByIndex(pcgIdx);
             driver.FindElement(By.XPath("//*[local-name()='input'][contains(@onclick,'sourceIdAsACRef')]")).Click();
             driver.FindElement(By.XPath("//*[local-name()='button'][@value='Save']")).Click();
+
+            while (checkToast())
+            {
+                Thread.Sleep(500);
+            }
+            Thread.Sleep(2500);
+            driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
         }
 
         //Method to build and save QAM session
         private static void buildQamSession()
         {
             driver.FindElement(By.XPath("//*[local-name()='button'][@value='Add']")).Click();
-            IWebElement element;
+            IWebElement element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'type')]"));
+            SelectElement srcDefType = new SelectElement(element);
+            //srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "Digital"));
+            srcDefType.SelectByIndex(findSelectOptionIndex(srcDefType.Options, "Digital"));
             enterInputData("//*[local-name()='input'][@id='mac_address'][contains(@name,'sessionId')]", pubSvc.SessionID);
             enterInputData("//*[local-name()='input'][contains(@name,'sessionNumber')]", Convert.ToString(pubSvc.SourceId));
             driver.FindElement(By.XPath("//*[local-name()='a'][contains(@onclick,'GenericqamSession')]")).Click();
+            System.Threading.Thread.Sleep(6000);
             enterInputData("//*[local-name()='input'][contains(@name,'bandwidth')]", Convert.ToString(pubSvc.Bandwidth));
             element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'qamName')]"));
             SelectElement qName = new SelectElement(element);
-            /*
-            List<IWebElement> qamOptions = new List<IWebElement>();
-            ReadOnlyCollection<IWebElement> qamSelectOptions = new ReadOnlyCollection<IWebElement>(qamOptions);
-            qamSelectOptions = driver.FindElements(By.XPath("//*[local-name()='select'][contains(@name,'qamName')]/*[local-name()='option']"));
-            int optionIndex = 0;
-            foreach (IWebElement e in qamSelectOptions)
-            {
-                if (e.Text == pubSvc.Qam.Name)
-                {
-                    break;
-                }
-                optionIndex++;
-            }
-            qName.SelectByIndex(optionIndex);
-            */
-            qName.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'qamName')]/*[local-name()='option']", pubSvc.Qam.Name));
+            //qName.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'qamName')]/*", pubSvc.Qam.Name));
+            qName.SelectByIndex(findSelectOptionIndex(qName.Options, pubSvc.Qam.Name));
             //Select Output Carrier dropdown
+            System.Threading.Thread.Sleep(5000);
             element = driver.FindElement(By.XPath("//*[local-name()='select'][@id='carrierSelector']"));
             SelectElement outputCarrierSelect = new SelectElement(element);
-            /*
-            List<IWebElement> carrierOptions = new List<IWebElement>();
-            ReadOnlyCollection<IWebElement> carrierSelectOptions = new ReadOnlyCollection<IWebElement>(carrierOptions);
-            carrierSelectOptions = driver.FindElements(By.XPath("//*[local-name()='select'][@id='carrierSelector']/*[local-name()='option']"));
-            optionIndex = 0;
-            foreach (IWebElement e in carrierSelectOptions)
-            {
-                if (e.Text == pubSvc.Qam.Port)
-                {
-                    break;
-                }
-                optionIndex++;
-            }
-            outputCarrierSelect.SelectByIndex(optionIndex);
-            */
-            outputCarrierSelect.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][@id='carrierSelector']/*[local-name()='option']",pubSvc.Qam.Port));
-
+            //outputCarrierSelect.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][@id='carrierSelector']/*",pubSvc.Qam.Port));
+            outputCarrierSelect.SelectByIndex(findSelectOptionIndex(outputCarrierSelect.Options, pubSvc.Qam.Port));
             enterInputData("//*[local-name()='input'][contains(@name,'programNumber')]", Convert.ToString(pubSvc.ProgramNumber));
-            enterInputData("//*[local-name()='th'][text()='Source IP Address 1']/following-sibling::*[local-name()='td']/*[local-name()='input']", pubSvc.SourceIp.ToString());
+            enterInputData("//*[local-name()='input'][@name='currentEntry.sourceIP']", pubSvc.SourceIp.ToString());
             enterInputData("//*[local-name()='input'][contains(@name,'destIP')]", pubSvc.MulticastIp.ToString());
             enterInputData("//*[local-name()='input'][contains(@name,'udpPort')]", Convert.ToString(pubSvc.UdpPort));
             driver.FindElement(By.XPath("//*[local-name()='button'][text()='Save']")).Click();
+            
+            while (checkToast())
+            {
+                Thread.Sleep(500);
+            }
+            Thread.Sleep(2500);
+            driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
         }
 
         //Method to build and save NonSA session
         private static void buildNonSA()
         {
+            driver.FindElement(By.XPath("//*[local-name()='button'][@value='Add']")).Click();
             IWebElement element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'type')]"));
             SelectElement srcDefType = new SelectElement(element);
             srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "NonSA"));
@@ -443,6 +420,12 @@ namespace buildEC
             enterInputData("//*[local-name()='input'][contains(@name,'nonSAMpegProgNumber')]", Convert.ToString(pubSvc.ProgramNumber));
             enterInputData("//*[local-name()='input'][contains(@name,'nonSACCFrequency')]", Convert.ToString(pubSvc.Frequency));
             driver.FindElement(By.XPath("//*[local-name()='button'][text()='Save']")).Click();
+            while (checkToast())
+            {
+                Thread.Sleep(500);
+            }
+            Thread.Sleep(2500);
+            driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
         }
 
         //I believe I can't use the SelectElement object correctly to select by text because of the XMLNS on the page
@@ -466,12 +449,38 @@ namespace buildEC
             return optionIndex;
         }
 
+        private static int findSelectOptionIndex(IList<IWebElement> options, string option)
+        {
+            int optionIndex = 0;
+            foreach (IWebElement e in options)
+            {
+                if (e.Text == option)
+                {
+                    break;
+                }
+                optionIndex++;
+            }
+
+            return optionIndex;
+        }
+
         //Method to clear input fields and enter data
         private static void enterInputData(string xpath, string data)
         {
             IWebElement e = driver.FindElement(By.XPath(xpath));
             e.Clear();
             e.SendKeys(data);
+        }
+
+            
+        private static bool checkToast()
+        {
+            IWebElement e = driver.FindElement(By.XPath("//*[local-name()='div'][@class='xwtToasterMessageWrapper']"));
+            if (e.Displayed)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

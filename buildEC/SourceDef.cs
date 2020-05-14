@@ -14,7 +14,7 @@ namespace buildEC
 
         public bool PCGone { get; set; } = false;
         public bool PCGtwo { get; set; } = false;
-
+        //Method to get sessions on Source Definition page
         public void GetSourceDefs()
         {
             List<IWebElement> Rows = new List<IWebElement>();
@@ -23,20 +23,20 @@ namespace buildEC
             int rowCount = 1;
             foreach (IWebElement s in ReadOnlyType)
             {
-                if (s.ToString() == "NonSA")
+                if (s.Text == "NonSA")
                 {
-                    string hub = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][8]")).ToString();
-                    string hubID = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][9]")).ToString();
+                    string hub = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][8]")).Text;
+                    string hubID = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][9]")).Text;
                     NonSA.Add(hub, Convert.ToInt32(hubID));
                 }
-                else if (s.ToString() == "PCG")
+                else if (s.Text == "PCG")
                 {
-                    string PCGsession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).ToString();
+                    string PCGsession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).Text;
                     PCG.Add(Regex.Replace(PCGsession, " .*$", String.Empty));
                 }
-                else if (s.ToString() == "QAM")
+                else if (s.Text == "QAM")
                 {
-                    string QamSession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).ToString();
+                    string QamSession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).Text;
                     Session.Add(Regex.Replace(QamSession, " .*$", String.Empty));
                 }
                 rowCount++;

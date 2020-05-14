@@ -40,7 +40,7 @@ namespace buildEC
         //Method to check if this service is a DTA service and set the value for the instance
         public void dtaServiceKa(string DTA)
         {
-            if ((DTA == "Yes") || (DTA == "1"))
+            if ((DTA.ToLower() == "yes") || (DTA == "1"))
                 DtaService = true;
             else
                 DtaService = false;
@@ -221,7 +221,7 @@ namespace buildEC
                 if (String.IsNullOrEmpty(this._sessionID) || this._sessionID.Length == 0)
                 {
                     List<string> Sessions = new List<string>();
-                    foreach(string s in Build.JSON[JSONc].channelMaps[JSONm].devices[JSONd].sessions)
+                    foreach (string s in Build.JSON[JSONc].channelMaps[JSONm].devices[JSONd].sessions)
                     {
                         if (this.DtaService)
                         {
@@ -237,7 +237,7 @@ namespace buildEC
                                 Sessions.Add(s);
                             }
                         }
-
+                    }
                         int size = Sessions.Count;
                         if (size != 1)
                         {
@@ -257,7 +257,6 @@ namespace buildEC
                             this._sessionID = Sessions[0];
                             return this._sessionID;
                         }
-                    }
                 }
                 else
                 {

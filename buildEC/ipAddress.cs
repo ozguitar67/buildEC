@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace buildEC
+namespace buildEC 
 {
     class ipAddress
     {
@@ -40,5 +40,10 @@ namespace buildEC
         {
             return Regex.IsMatch(address, @"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$");
         }
+
+    public override string ToString()
+    {
+        return this._ip;
     }
+}
 }
