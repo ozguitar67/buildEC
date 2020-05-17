@@ -331,16 +331,19 @@ namespace buildEC
                     buildPCG(1);
                     buildPCG(2);
                 }
+                driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source Definitions URL']")).Click();
             }
 
             if (!definition.QamSessionExists())
             {
                 buildQamSession();
+                driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source Definitions URL']")).Click();
             }
 
             if (!definition.NonSaExists() && pubSvc.DtaService)
             {
                 buildNonSA();
+                driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source Definitions URL']")).Click();
             }
         }
 
@@ -356,7 +359,11 @@ namespace buildEC
             enterInputData("//*[local-name()='input'][contains(@name,'pcgSessionNumber')]", Convert.ToString(pubSvc.SourceId));
             element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'pcgName')]"));
             SelectElement pcgName = new SelectElement(element);
-            int pcgIdx = ((Convert.ToInt32(Regex.Replace(pubSvc.PCGsession, "00:F([0-9]):00:00:00:00", "${1}")) - 1) * 2) + p;
+            int pcgIdx = ((Convert.ToInt32(Regex.Replace(pubSvc.PCGsession, "00:F([0-9]):00:00:00:00", "${1}")) - 1) * 2);
+            if (p == 2)
+            {
+                pcgIdx++;
+            }
             pcgName.SelectByIndex(pcgIdx);
             driver.FindElement(By.XPath("//*[local-name()='input'][contains(@onclick,'sourceIdAsACRef')]")).Click();
             driver.FindElement(By.XPath("//*[local-name()='button'][@value='Save']")).Click();
@@ -366,7 +373,6 @@ namespace buildEC
                 Thread.Sleep(500);
             }
             Thread.Sleep(2500);
-            driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
         }
 
         //Method to build and save QAM session
@@ -396,6 +402,7 @@ namespace buildEC
             enterInputData("//*[local-name()='input'][@name='currentEntry.sourceIP']", pubSvc.SourceIp.ToString());
             enterInputData("//*[local-name()='input'][contains(@name,'destIP')]", pubSvc.MulticastIp.ToString());
             enterInputData("//*[local-name()='input'][contains(@name,'udpPort')]", Convert.ToString(pubSvc.UdpPort));
+            MessageBox.Show("Verify!");
             driver.FindElement(By.XPath("//*[local-name()='button'][text()='Save']")).Click();
             
             while (checkToast())
@@ -403,7 +410,7 @@ namespace buildEC
                 Thread.Sleep(500);
             }
             Thread.Sleep(2500);
-            driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
+            //driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
         }
 
         //Method to build and save NonSA session
@@ -420,12 +427,10 @@ namespace buildEC
             enterInputData("//*[local-name()='input'][contains(@name,'nonSAMpegProgNumber')]", Convert.ToString(pubSvc.ProgramNumber));
             enterInputData("//*[local-name()='input'][contains(@name,'nonSACCFrequency')]", Convert.ToString(pubSvc.Frequency));
             driver.FindElement(By.XPath("//*[local-name()='button'][text()='Save']")).Click();
-            while (checkToast())
-            {
-                Thread.Sleep(500);
-            }
-            Thread.Sleep(2500);
-            driver.FindElement(By.XPath("//*[local-name()='a'][@id='Source List URL']")).Click();
+
+            Thread.Sleep(1500);
+
+            driver.SwitchTo().Alert().Accept();
         }
 
         //I believe I can't use the SelectElement object correctly to select by text because of the XMLNS on the page
