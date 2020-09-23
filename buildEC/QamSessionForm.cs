@@ -22,7 +22,18 @@ namespace buildEC
 
         public void OkayBtn_Click(object sender, EventArgs e)
         {
-            Build.pubSvc.SessionID = this.sessionDropDownList.Text.ToString();
+            //Build.pubSvc.SessionID = this.sessionDropDownList.Text.ToString();
+            //this.Close();
+
+            if (String.IsNullOrEmpty(this.sessionTextBox.Text.ToString()) || this.sessionTextBox.Text.ToString() == "")
+            {
+                Build.pubSvc.SessionID = this.sessionDropDownList.Text.ToString();
+            }
+            else
+            {
+                Build.pubSvc.SessionID = this.sessionTextBox.Text.ToString();
+            }
+
             this.Close();
         }
     }

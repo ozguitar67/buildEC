@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace buildEC
@@ -53,7 +48,7 @@ namespace buildEC
             ipAddress test = new ipAddress();
             test.Ip = textBox1.Text.ToString();
             MessageBox.Show(test.Ip);
-            */
+            
 
             //Set these values for testing
             SrcNmCol.Text = "D";
@@ -68,7 +63,7 @@ namespace buildEC
             ControllerCol.Text = "A";
             FrequencyCol.Text = "AH";
             DTAservCol.Text = "G";
-            
+            */
             //Assign all column values to pull cell values
             sourceNameCol = SrcNmCol.Text.ToString();
             sourceIdCol = SrcIdCol.Text.ToString();
@@ -124,6 +119,7 @@ namespace buildEC
                     Build.selectSourceID(Build.pubSvc.SourceId);
                     Build.gotoSourceDef();
                     Build.buildService();
+                    blankLines = 0;
                 }
 
                 Thread.Sleep(2500);

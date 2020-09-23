@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace buildEC
 {
@@ -19,28 +20,39 @@ namespace buildEC
         {
             List<IWebElement> Rows = new List<IWebElement>();
             ReadOnlyCollection<IWebElement> ReadOnlyType = new ReadOnlyCollection<IWebElement>(Rows);
-            ReadOnlyType = Build.driver.FindElements(By.XPath("//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr']//*[local-name()='td'][2]"));
-            int rowCount = 1;
-            foreach (IWebElement s in ReadOnlyType)
+            try
             {
-                if (s.Text == "NonSA")
+                ReadOnlyType = Build.driver.FindElements(By.XPath("//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr']//*[local-name()='td'][2]"));
+                int rowCount = 1;
+                foreach (IWebElement s in ReadOnlyType)
                 {
-                    string hub = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][8]")).Text;
-                    string hubID = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][9]")).Text;
-                    NonSA.Add(hub, Convert.ToInt32(hubID));
+                    if (s.Text == "NonSA")
+                    {
+                        string hub = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][8]")).Text;
+                        string hubID = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][9]")).Text;
+                        NonSA.Add(hub, Convert.ToInt32(hubID));
+                    }
+                    else if (s.Text == "PCG")
+                    {
+                        string PCGsession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).Text;
+                        PCG.Add(Regex.Replace(PCGsession, " .*$", String.Empty));
+                    }
+                    else if (s.Text == "QAM")
+                    {
+                        string QamSession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).Text;
+                        Session.Add(Regex.Replace(QamSession, " .*$", String.Empty));
+                    }
+                    rowCount++;
                 }
-                else if (s.Text == "PCG")
-                {
-                    string PCGsession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).Text;
-                    PCG.Add(Regex.Replace(PCGsession, " .*$", String.Empty));
-                }
-                else if (s.Text == "QAM")
-                {
-                    string QamSession = Build.driver.FindElement(By.XPath($"//*[local-name()='table'][@id='definitionTable']//*[local-name()='tr'][{rowCount}]//*[local-name()='td'][5]")).Text;
-                    Session.Add(Regex.Replace(QamSession, " .*$", String.Empty));
-                }
-                rowCount++;
             }
+            catch (NoSuchElementException)
+            {
+                MessageBox.Show("Could not find source definitions.");
+                Build.closeExcelFile();
+                Build.driver.Quit();
+                System.Windows.Forms.Application.Exit();
+            }
+            
         }
 
         public bool NonSaExists()

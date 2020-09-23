@@ -33,6 +33,8 @@
             this.hubDropDownList = new System.Windows.Forms.ComboBox();
             this.okayBtn = new System.Windows.Forms.Button();
             this.message2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.hubTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // message1
@@ -55,7 +57,7 @@
             // 
             // okayBtn
             // 
-            this.okayBtn.Location = new System.Drawing.Point(187, 97);
+            this.okayBtn.Location = new System.Drawing.Point(181, 150);
             this.okayBtn.Name = "okayBtn";
             this.okayBtn.Size = new System.Drawing.Size(75, 23);
             this.okayBtn.TabIndex = 2;
@@ -73,11 +75,30 @@
             this.message2.Text = "QAM NSG_Name RF Carrier  XX/XX default hub not found";
             this.message2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(173, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Or enter a value";
+            // 
+            // hubTextBox
+            // 
+            this.hubTextBox.Location = new System.Drawing.Point(125, 124);
+            this.hubTextBox.MaxLength = 17;
+            this.hubTextBox.Name = "hubTextBox";
+            this.hubTextBox.Size = new System.Drawing.Size(200, 20);
+            this.hubTextBox.TabIndex = 5;
+            // 
             // HubForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 136);
+            this.ClientSize = new System.Drawing.Size(434, 185);
+            this.Controls.Add(this.hubTextBox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.message2);
             this.Controls.Add(this.okayBtn);
             this.Controls.Add(this.hubDropDownList);
@@ -96,5 +117,7 @@
         private System.Windows.Forms.ComboBox hubDropDownList;
         private System.Windows.Forms.Button okayBtn;
         private System.Windows.Forms.Label message2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox hubTextBox;
     }
 }

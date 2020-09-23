@@ -43,6 +43,7 @@ namespace buildEC
             //Set preferences to allow EC pages to display
             profile.SetPreference("security.ssl3.dhe_rsa_aes_128_sha", false);
             profile.SetPreference("security.ssl3.dhe_rsa_aes_256_sha", false);
+            options.AcceptInsecureCertificates = true;
             options.Profile = profile;
             //Create Firefox service to hide console window for webdriver
             FirefoxDriverService ffService = FirefoxDriverService.CreateDefaultService();
@@ -186,6 +187,7 @@ namespace buildEC
                 //Bypass the security warning
                 catch (InvalidOperationException)
                 {
+                    Thread.Sleep(1500);
                     driver.FindElement(By.Id("advancedButton")).Click();
                     driver.FindElement(By.Id("exceptionDialogButton")).Click();
                 }
@@ -280,17 +282,25 @@ namespace buildEC
             {
                 changeWaitTime(15);
                 IWebElement element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='action_panel']//*[local-name()='select'][@name='filterType']"));
+                Thread.Sleep(500);
                 SelectElement select = new SelectElement(element);
-                select.SelectByIndex(1);
-                element = driver.FindElement(By.XPath("//*[local-name()='div'][@class='filter_panel']//*[local-name()='input'][@id='valInput']"));
-                changeWaitTime(0);
+                select.SelectByIndex(findSelectOptionIndex(select.Options, "Source ID"));
+                //select.SelectByIndex(1);
+                Thread.Sleep(750);
+                element = driver.FindElement(By.XPath("//*[local-name()='input'][@id='valInput']"));
                 element.Clear();
-                element.SendKeys(Convert.ToString(sourceID));                
+                element.SendKeys(Convert.ToString(sourceID));
+                changeWaitTime(0);
                 driver.FindElement(By.XPath("//*[local-name()='div'][@class='filter_panel']//*[local-name()='button']")).Click();
             }
             catch (NoSuchElementException)
             {
                 MessageBox.Show("Element searched for not found");
+                exitApp();
+            }
+            catch (ElementNotInteractableException)
+            {
+                MessageBox.Show("Cannot enter Source ID");
                 exitApp();
             }
         }
@@ -307,6 +317,11 @@ namespace buildEC
             catch (NoSuchElementException)
             {
                 MessageBox.Show("Element searched for could not be found");
+                exitApp();
+            }
+            catch (WebDriverException)
+            {
+                MessageBox.Show("Connection failure");
                 exitApp();
             }
         }
@@ -354,7 +369,8 @@ namespace buildEC
             driver.FindElement(By.XPath("//*[local-name()='button'][@value='Add']")).Click();
             IWebElement element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'type')]"));
             SelectElement srcDefType = new SelectElement(element);
-            srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "PCG"));
+            //srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "PCG"));
+            srcDefType.SelectByIndex(findSelectOptionIndex(srcDefType.Options, "PCG"));
             enterInputData("//*[local-name()='input'][@id='mac_address'][contains(@name,'pcg')]", pcgS);
             enterInputData("//*[local-name()='input'][contains(@name,'pcgSessionNumber')]", Convert.ToString(pubSvc.SourceId));
             element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'pcgName')]"));
@@ -392,8 +408,16 @@ namespace buildEC
             SelectElement qName = new SelectElement(element);
             //qName.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'qamName')]/*", pubSvc.Qam.Name));
             qName.SelectByIndex(findSelectOptionIndex(qName.Options, pubSvc.Qam.Name));
+            while (checkToast())
+            {
+                Thread.Sleep(250);
+            }
+            while (!checkToast())
+            {
+                Thread.Sleep(250);
+            }
             //Select Output Carrier dropdown
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(1500);
             element = driver.FindElement(By.XPath("//*[local-name()='select'][@id='carrierSelector']"));
             SelectElement outputCarrierSelect = new SelectElement(element);
             //outputCarrierSelect.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][@id='carrierSelector']/*",pubSvc.Qam.Port));
@@ -402,7 +426,7 @@ namespace buildEC
             enterInputData("//*[local-name()='input'][@name='currentEntry.sourceIP']", pubSvc.SourceIp.ToString());
             enterInputData("//*[local-name()='input'][contains(@name,'destIP')]", pubSvc.MulticastIp.ToString());
             enterInputData("//*[local-name()='input'][contains(@name,'udpPort')]", Convert.ToString(pubSvc.UdpPort));
-            MessageBox.Show("Verify!");
+            //MessageBox.Show("Verify!");
             driver.FindElement(By.XPath("//*[local-name()='button'][text()='Save']")).Click();
             
             while (checkToast())
@@ -419,11 +443,13 @@ namespace buildEC
             driver.FindElement(By.XPath("//*[local-name()='button'][@value='Add']")).Click();
             IWebElement element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'type')]"));
             SelectElement srcDefType = new SelectElement(element);
-            srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "NonSA"));
+            srcDefType.SelectByIndex(findSelectOptionIndex(srcDefType.Options, "NonSA"));
+            //srcDefType.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'type')]/*", "NonSA"));
             driver.FindElement(By.XPath("//*[local-name()='div'][@id='distribution']//*[local-name()='input'][2]")).Click();
             element = driver.FindElement(By.XPath("//*[local-name()='select'][contains(@name,'hubId')]"));
             SelectElement hubName = new SelectElement(element);
-            hubName.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'hubId')]/*", pubSvc.DefaultHub));
+            hubName.SelectByIndex(findSelectOptionIndex(hubName.Options, pubSvc.DefaultHub));
+            //hubName.SelectByIndex(findSelectOptionIndex("//*[local-name()='select'][contains(@name,'hubId')]/*", pubSvc.DefaultHub));
             enterInputData("//*[local-name()='input'][contains(@name,'nonSAMpegProgNumber')]", Convert.ToString(pubSvc.ProgramNumber));
             enterInputData("//*[local-name()='input'][contains(@name,'nonSACCFrequency')]", Convert.ToString(pubSvc.Frequency));
             driver.FindElement(By.XPath("//*[local-name()='button'][text()='Save']")).Click();
@@ -480,10 +506,21 @@ namespace buildEC
             
         private static bool checkToast()
         {
-            IWebElement e = driver.FindElement(By.XPath("//*[local-name()='div'][@class='xwtToasterMessageWrapper']"));
-            if (e.Displayed)
+            try
             {
-                return false;
+                IWebElement e = driver.FindElement(By.XPath("//*[local-name()='div'][@class='xwtToasterMessageWrapper']"));
+                if (e.Displayed)
+                {
+                    return false;
+                }
+            }
+            catch (NoSuchElementException)
+            {
+                return true;
+            }
+            catch (StaleElementReferenceException)
+            {
+                //Ignoring because the page refreshes while updating...
             }
             return true;
         }

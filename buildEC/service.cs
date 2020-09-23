@@ -95,7 +95,7 @@ namespace buildEC
         {
             bool isValid = true;
 
-            if (!this.DtaService || String.IsNullOrEmpty(this.SourceName) || !(this.SourceId > 0) || String.IsNullOrEmpty(Convert.ToString(this.SourceIp.Ip)) || String.IsNullOrEmpty(Convert.ToString(this.MulticastIp.Ip)) || !(this.UdpPort > 0) || !(this.ProgramNumber > 0) || !(this.Bandwidth > 0) || String.IsNullOrEmpty(this.Qam.Name) || !(this.Qam.getPortNumber() > 0) || !(this.Frequency > 0))
+            if (String.IsNullOrEmpty(this.SourceName) || !(this.SourceId > 0) || String.IsNullOrEmpty(Convert.ToString(this.SourceIp.Ip)) || String.IsNullOrEmpty(Convert.ToString(this.MulticastIp.Ip)) || !(this.UdpPort > 0) || !(this.ProgramNumber > 0) || !(this.Bandwidth > 0) || String.IsNullOrEmpty(this.Qam.Name) || !(this.Qam.getPortNumber() > 0) || !(this.Frequency > 0))
             {
                 isValid = false;
                 count--;
